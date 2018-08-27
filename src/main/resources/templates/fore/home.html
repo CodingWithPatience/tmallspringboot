@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title>模仿天猫官网</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" /> 
+	
+	<script type="text/javascript">
+		// 定义两个个存储产品信息的全局变量，供所有<script>标签使用
+		var productWCategory = new Array();
+		var productDetail = new Array();
+	</script>
+</head>
+<body>
+	<div th:insert="~{include/header :: header}"></div>
+	<div th:insert="~{include/top :: top}"></div>
+	<div th:insert="~{include/search :: search}"></div>
+	<div th:insert="~{include/home/homePage :: homePage}"></div>
+	<div th:insert="~{include/footer :: footer}"></div>
+</body>
+</html>

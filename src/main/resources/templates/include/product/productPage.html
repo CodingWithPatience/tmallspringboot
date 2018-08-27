@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="productPage">
+<div class="categoryPictureInProductPageDiv">
+	<img class="categoryPictureInProductPage" th:attr="src=@{'/img/category/'+${p.category.id}+'.jpg'}">
+</div>
+
+<div class="productPageDiv">
+	<div th:insert="~{include/product/imgAndInfo :: imgAndInfo}"></div>
+	<div th:insert="~{include/product/productReview :: productReview}"></div>
+	<div th:insert="~{include/product/productDetail :: productDetail}"></div>
+</div>
+</div>
+</html>

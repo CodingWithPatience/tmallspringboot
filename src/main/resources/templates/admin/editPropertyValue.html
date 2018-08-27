@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>编辑产品属性值</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+
+	<script>
+		$(function() {
+			$("input.pvValue").keyup(function(){
+				var value = $(this).val();
+				var page = getProjectPath()+"admin/propertyValue/update";
+				var pvid = $(this).attr("pvid");
+				var parentSpan = $(this).parent("span");
+				parentSpan.css("border","1px solid yellow");
+				$.post(
+					page,
+					{"value":value,"id":pvid},
+					function(result){
+						if("success"==result)
+						parentSpan.css("border","1px solid green");
+						else
+							parentSpan.css("border","1px solid red");
+					}
+				);		
+			});
+		});
+	</script>
+
+	<div class="workingArea">
+		<ol class="breadcrumb">
+			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="active" th:inline="text">[[${p.name}]]</li>
+			<li class="active">编辑产品属性</li>
+		</ol>
+		<div class="editPVDiv">
+			<div class="eachPV" th:each="pv : ${pvs}">
+				<span class="pvName" th:inline="text">[[${pv.property.name}]]</span>
+				<span class="pvValue"><input class="pvValue" th:attr="pvid=@{${pv.id}}, value=@{${pv.value}}" type="text"></span>
+			</div>
+		<div style="clear:both"></div>	
+		</div>
+	</div>
+</body>
+</html>

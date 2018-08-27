@@ -1,0 +1,33 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /tmallspringboot
+    session:
+      timeout: 0
+          
+spring:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  resources:
+    static-locations: classpath:/static/
+    
+datasource:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/tmall_ssm?unicode=true&characterEncoding=utf8&useSSL=false
+  username: root
+  password: admin
+  initialSize: 1
+  minIdle: 1
+  maxActive: 20
+  maxWait: 60000
+  minEvictableIdleTimeMillis: 300000
+  timeBetweenEvictionRunsMillis: 60000
+  defaultAutoCommit: false
+  poolPreparedStatements: true
+  maxPoolPreparedStatementPerConnectionSize: 20
+  
+mybatis-config-file: mybatis-config.xml
+mapper-path: /mapper/**.xml
+pojo-package: com.zhihao.tmall.pojo

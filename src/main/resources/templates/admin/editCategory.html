@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>编辑分类</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+
+	<script>
+    $(function(){
+        $("#editForm").submit(function(){
+            if(!checkEmpty("name","分类名称"))
+                return false;
+            return true;
+        });
+    });
+	</script>
+
+	<div class="workingArea">
+		<ol class="breadcrumb">
+			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li class="active">编辑分类</li>
+		</ol>
+		<div class="panel panel-warning editDiv">
+			<div class="panel-heading">编辑分类</div>
+			<div class="panel-body">
+				<form method="post" id="editForm" th:attr="action=@{/admin/category/update/}"  enctype="multipart/form-data">
+					<table class="editTable">
+						<tr>
+							<td>分类名称</td>
+							<td><input  id="name" name="name" th:attr="value=@{${c.name}}" type="text" class="form-control"></td>
+						</tr>
+						<tr>
+							<td>分类圖片</td>
+							<td>
+								<input id="categoryPic" accept="image/*" type="file" name="image" />
+							</td>
+						</tr>
+						<tr class="submitTR">
+							<td colspan="2" align="center">
+								<input type="hidden" name="id" th:attr="value=@{${c.id}}">
+								<button type="submit" class="btn btn-success">提 交</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

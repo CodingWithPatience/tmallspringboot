@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="hcp">
+	<script th:inline="javascript">
+		var url = "jsondata/product/";
+		var count = 0;
+		var total = [[${cs.size()}]];
+		var cidArr = new Array();
+		
+		// 页面渲染完之中执行的代码
+		$(function(){
+			// 获取所有的Category id
+			$("div.eachCategory").each(function(){
+				var cid = $(this).attr("cid");
+				cidArr.push(cid);
+			});
+			
+			// 绑定事件，监听滚动条下拉的动作
+			bindScrollEvent();
+			
+			// 隐藏包含footer部分的div，待动态加载完所有产品信息时再显示
+			$("div#footerDiv").hide();
+			
+			// 请求后台，加载产品信息
+			 queryProduct(count++); 
+		});
+		
+		// 异步加载产品信息
+		function queryProduct(count) {
+			if(count < total) {
+				// productWCategory是存储产品信息的全局变量，在<head>标签中定义
+				// 若productWCategory中含有所需的产品信息数据，就直接渲染页面
+				// 否则，使用异步的Ajax方法请求数据
+				if(productWCategory.length > 0) {
+					for(i in productWCategory) {
+						if(productWCategory[i][0].category.id == cidArr[count]) {
+							showProductData(productWCategory[i]);
+							return;
+						}
+					}
+				}
+				
+				$.get(
+					url+cidArr[count],
+					function(data){
+						productDetail.push(data);
+						showProductData(data);
+					}
+				);
+			}
+			// 产品信息加载完后，添加一张表示已经到底部的图片及显示footer部分
+			if(count > total) {
+				$(window).unbind("scroll");
+				var img = document.createElement("img");
+				img.setAttribute("src",getProjectPath()+"img/site/end.png");
+				img.className = "endpng";
+				img.idName = "endpng";
+				$("div.homePageCategoryProducts").append(img);
+				$("div#footerDiv").show();
+			}
+			
+		}
+		
+		// 将产品信息显示在div内
+		function showProductData(data) {
+			var cName = data[0].category.name;
+			var childDiv = document.createElement("div");
+			childDiv.className = "eachHomepageCategoryProducts";
+			var leftMarkDiv = document.createElement("div");
+			leftMarkDiv.className = "left-mark";
+			var lastDiv = document.createElement("div");
+			var span = document.createElement("span")
+			span.className = "categoryTitle";
+			var cName = document.createTextNode(cName);
+			var br = document.createElement("br");
+			var productDiv = createProductDiv(data);
+			span.appendChild(cName);
+			lastDiv.style.clear="both";
+			childDiv.appendChild(leftMarkDiv);
+			childDiv.appendChild(span);
+			childDiv.appendChild(br);
+			childDiv.appendChild(productDiv);
+			childDiv.appendChild(lastDiv);
+			
+			$("div.homePageCategoryProducts").append(childDiv);
+		}
+		
+		// 创建包含产品信息的div
+		function createProductDiv(data) {
+			var div = document.createElement("div");
+			var projectPath = getProjectPath();
+			for(var i=0; i<5; i++){
+				var pName = data[i].name;
+				var pPromotePrice = data[i].promotePrice;
+				var money = formatMoney(pPromotePrice);
+				var pid = data[i].id;
+				var firstImageId = data[i].firstProductImage.id;
+				
+				var childDiv = document.createElement("div");
+				childDiv.className = "productItem";
+				var img = document.createElement("img");
+				img.setAttribute("src",projectPath+"img/productSingle_middle/"+firstImageId+".jpg");
+				var firstA = document.createElement("a");
+				firstA.setAttribute("href",projectPath+"product/"+pid);
+				var secondA = document.createElement("a");
+				secondA.className = "productItemDescLink";
+				secondA.setAttribute("href",projectPath+"product/"+pid);
+				secondA.setAttribute("target","_blank");
+				var spanA = document.createElement("span");
+				spanA.className = "productItemDesc";
+				var textA = document.createTextNode("[热销]");
+				var textB = document.createTextNode(pName.substring(0,20));
+				var spanB = document.createElement("span");
+				var spanC = document.createElement("span");
+				spanC.className = "productPrice";
+				var spanD = document.createElement("span");
+				var textD = document.createTextNode("￥"+money);
+				
+				spanD.appendChild(textD);
+				spanA.appendChild(textA);
+				spanB.appendChild(textB);
+				spanA.appendChild(spanB);
+				spanC.appendChild(spanD);
+				
+				firstA.appendChild(img);
+				secondA.appendChild(spanA);
+				childDiv.appendChild(firstA);
+				childDiv.appendChild(secondA);
+				childDiv.appendChild(spanC);
+				
+				div.appendChild(childDiv);
+			}
+			return div;
+		}
+		
+		function bindScrollEvent(){
+			// 添加滚动监听事件
+			$(window).scroll( function() {
+				var docHeight = $(document).height(); // 获取整个页面的高度
+				var winHeight = $(window).height(); // 获取当前窗体的高度
+				var winScrollHeight = $(window).scrollTop(); // 获取滚动条滚动的距离
+				if(docHeight -30 <= winHeight + winScrollHeight){
+					// 加载更多的产品数据
+					queryProduct(count++);
+				}
+					
+			});
+		} 
+	</script> 
+
+	<div class="homePageCategoryProducts" ></div>
+</div>
+</html>

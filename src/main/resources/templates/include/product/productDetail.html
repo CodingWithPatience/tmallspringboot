@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="productDetailDiv" th:fragment="productDetail">
+	<div class="productDetailTopPart">
+		<a href="#nowhere" class="productDetailTopPartSelectedLink selected">商品详情</a>
+		<a href="#nowhere" class="productDetailTopReviewLink">累计评价 <span class="productDetailTopReviewLinkNumber" th:text="${p.reviewCount}"></span> </a>
+	</div>
+	<div class="productParamterPart">
+		<div class="productParamter">产品参数：</div>
+		
+		<div class="productParamterList" th:each="pv : ${pvs}">
+			<span th:inline="text">[[${pv.property.name}]]: [[${pv.value}]]</span>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+	<div class="productDetailImagesPart" th:each="pi : ${p.productDetailImages}">
+		<img th:attr="src=@{'/img/productDetail/'+${pi.id}+'.jpg'}">
+	</div>
+</div>
+</html>

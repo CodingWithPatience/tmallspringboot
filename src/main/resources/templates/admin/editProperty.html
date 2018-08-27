@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>编辑属性</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+	
+	<div class="workingArea">
+	<ol class="breadcrumb">
+	  <li><a th:href="@{/admin/category/list}">所有分类</a></li>
+	  <li><a th:href="@{'/admin/property/list/'+${p.category.id}}"
+	   			 th:inline="text">[[${p.category.name}]]</a>
+	  </li>
+	  <li class="active">编辑属性</li>
+	</ol>
+
+	<div class="panel panel-warning editDiv">
+		<div class="panel-heading">编辑属性</div>
+			<div class="panel-body">
+				<form method="post" id="editForm" th:attr="action=@{/admin/property/update}">
+					<table class="editTable">
+						<tr>
+							<td>属性名称</td>
+							<td><input id="name" name="name" th:attr="value=@{${p.name}}" type="text" class="form-control"></td>
+						</tr>
+						<tr class="submitTR">
+							<td colspan="2" align="center">
+							<input type="hidden" name="id" th:attr="value=@{${p.id}}">
+							<input type="hidden" name="cid" th:attr="value=@{${p.category.id}}">
+							<button type="submit" class="btn btn-success">提 交</button></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

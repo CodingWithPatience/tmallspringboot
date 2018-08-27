@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="adminPage">
+	<script th:inline="javascript">
+		// 判断href是否为当前url，若是当前url，在li标签内添加class="disabled",
+		// 否则移除li标签内的class="diabled"
+		$(function () {
+			var curUrl = document.location.href;
+			var pathName = document.location.pathname;
+			var pos = curUrl.indexOf(pathName);
+			var subUrl = curUrl.substring(pos, curUrl.length);
+			$("ul.pagination").find("a").each(function () {
+				var url = $(this).attr("href");
+				if (subUrl == url) {
+					$(this).parent().addClass("disabled");
+				} else {
+					$(this).parent().removeClass("disabled");
+				}
+			});
+		})
+		// 使href属性值为当前url的a标签点击无效
+		// 通过class="diabled"来获得href属性值为当前url的a标签
+		$(function(){
+			$("ul.pagination li.disabled a").click(function(){
+				return false;
+			});
+		});
+	</script>
+
+	<nav>
+		<ul class="pagination" th:with="id=${page.id==null?'':page.id+'/'}">
+			<li>
+				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getFirstPage()}}" aria-label="Previous" >
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li>
+				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getPerviousPage()}}" aria-label="Previous" >
+					<span aria-hidden="true">&lsaquo;</span>
+				</a>
+			</li>    
+			<li th:each="page, stat : ${page.getPageList()}">
+				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getPage(stat.index*page.getCount())}}" th:inline="text">[[${stat.count}]]</a>
+			</li>
+			<li>
+				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getNextPage()}}" aria-label="Next">
+					<span aria-hidden="true">&rsaquo;</span>
+				</a>
+			</li>
+			<li>
+				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getLastPage()}}" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+</html>

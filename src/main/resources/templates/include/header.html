@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+	<script th:attr="src=@{/js/jquery/2.0.0/jquery.min.js}"></script>
+	<link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet" 
+				th:href="@{/css/bootstrap/3.3.6/bootstrap.min.css}"/>
+	<script th:attr="src=@{/js/bootstrap/3.3.6/bootstrap.min.js}"></script>
+	<link href="css/fore/style.css" rel="stylesheet"
+				th:href="@{/css/fore/style.css}"/>
+				
+	<link rel="shortcut icon" type="image/x-icon" 
+		th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+	
+	<script th:inline="javascript">
+		function formatMoney(num){
+			num = num.toString().replace(/\$|\,/g,'');  
+			if(isNaN(num))  
+					num = "0";  
+			sign = (num == (num = Math.abs(num)));  
+			num = Math.floor(num*100+0.50000000001);  
+			cents = num%100;  
+			num = Math.floor(num/100).toString();  
+			if(cents<10)  
+			cents = "0" + cents;  
+			for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)  
+			num = num.substring(0,num.length-(4*i+3))+','+  
+			num.substring(num.length-(4*i+3));  
+			return (((sign)?'':'-') + num + '.' + cents);  
+		}
+		function checkEmpty(id, name){
+			var value = $("#"+id).val();
+			if(value.length==0){
+				
+				$("#"+id)[0].focus();
+				return false;
+			}
+			return true;
+		}
+
+		$(function(){
+
+			$("a.productDetailTopReviewLink").click(function(){
+				$("div.productReviewDiv").show();
+				$("div.productDetailDiv").hide();
+			});
+			$("a.productReviewTopPartSelectedLink").click(function(){
+				$("div.productReviewDiv").hide();
+				$("div.productDetailDiv").show();		
+			});
+			
+			$("span.leaveMessageTextareaSpan").hide();
+			$("img.leaveMessageImg").click(function(){
+				
+				$(this).hide();
+				$("span.leaveMessageTextareaSpan").show();
+				$("div.orderItemSumDiv").css("height","100px");
+			});
+			
+			$("div#footer a[href$=#nowhere]").click(function(){
+				alert("模仿天猫的连接，并没有跳转到实际的页面");
+			});
+			
+			$("a.wangwanglink").click(function(){
+				alert("模仿旺旺的图标，并不会打开旺旺");
+			});
+			$("a.notImplementLink").click(function(){
+				alert("这个功能没做，蛤蛤~");
+			});
+			
+		});
+		
+		// 获取当前url host及项目名称部分的路径
+		function getProjectPath(){
+			var curPath = document.location.href;
+			var pathName = document.location.pathname;
+			var index = pathName.substr(1).indexOf("/");
+		  var projectPart = pathName.substr(0,index+2);
+		  var pos = curPath.indexOf(pathName);
+		  var hostPart = curPath.substring(0,pos);
+		  var projectPath = hostPart + projectPart;
+		  return projectPath;
+		}
+		
+		// 格式化金额，保留两位小数
+		function formatMoney2(num) {   
+		   num = parseFloat((num + "").replace(/[^\d\.-]/g, "")).toFixed(2) + "";   
+		   var intPart = num.split(".")[0].split("").reverse();   
+		   var floatPart = num.split(".")[1];   
+		   var result = "";   
+		   for(i = 0; i < intPart.length; i ++ ) {   
+		      result += intPart[i] + ((i + 1) % 3 == 0 && (i + 1) != intPart.length ? "," : "");   
+		   }   
+		   return result.split("").reverse().join("") + "." + floatPart;   
+		} 
+	</script>	
+</head>
+</html>

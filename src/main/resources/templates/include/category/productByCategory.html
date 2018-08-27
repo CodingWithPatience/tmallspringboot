@@ -1,0 +1,27 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="pbc">
+<div class="categoryProducts">
+	<div class="productUnit" th:each="p : ${c.products}" th:attr="price=@{${p.promotePrice}}">
+		<div class="productUnitFrame">
+			<a th:href="@{'/product/'+${p.id}}">
+				<img class="productImage" th:attr="src=@{'/img/productSingle_middle/'+${p.firstProductImage.id}+'.jpg'}">
+			</a>
+			<span class="productPrice" th:inline="text">¥[[${#numbers.formatDecimal(p.promotePrice,0,'COMMA',2,'POINT')}]]</span>
+			<a class="productLink" th:href="@{'/product/'+${p.id}}">
+			 <span th:inline="text">[[${p.name}]]</span>
+			</a>
+			<a class="tmallLink" th:href="@{'/product/'+${p.id}}">天猫专卖</a>
+
+			<div class="show1 productInfo">
+				<span class="monthDeal ">月成交 <span class="productDealNumber"><strong th:inline="text">[[${p.saleCount}]]</strong>笔</span></span>
+				<span class="productReview">评价<span class="productReviewNumber"><strong th:inline="text">[[${p.reviewCount}]]</strong></span></span>
+				<span class="wangwang">
+					<a class="wangwanglink" href="#"><img th:attr="src=@{/img/site/wangwang.png}"></a>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div style="clear:both"></div>
+</div>
+</div>
+</html>

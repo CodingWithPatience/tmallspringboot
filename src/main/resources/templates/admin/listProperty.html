@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>属性管理</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+  <div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+	
+	<script>
+		$(function() {
+			$("#addForm").submit(function() {
+				if (checkEmpty("name", "属性名称"))
+					return true;
+				return false;
+			});
+		});
+	</script>
+
+	<div class="workingArea">
+		<ol class="breadcrumb">
+			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li><a th:href="@{'/admin/property/list/'+${c.id}}">[[${c.name}]]</a></li>
+			<li class="active">属性管理</li>
+		</ol>
+		<div class="listDataTableDiv">
+			<table class="table table-striped table-bordered table-hover table-condensed">
+				<thead>
+					<tr class="success">
+						<th>ID</th>
+						<th>属性名称</th>
+						<th>编辑</th>
+						<th>删除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="p : ${ps}">
+						<td th:inline="text">[[${p.id}]]</td>
+						<td th:inline="text">[[${p.name}]]</td>
+						<td><a th:href="@{'/admin/property/edit/'+${p.id}}">
+							<span class="glyphicon glyphicon-edit"></span></a>
+						</td>
+						<td><a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/property/delete/'+${p.id}}">
+							<span class="glyphicon glyphicon-trash"></span></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="pageDiv">
+			<div th:insert="~{/include/admin/adminPage :: adminPage}"></div>
+		</div>
+		<div class="panel panel-warning addDiv">
+			<div class="panel-heading">新增属性</div>
+			<div class="panel-body">
+				<form method="post" id="addForm" th:attr="action=@{/admin/property/add}">
+					<table class="addTable">
+						<tr>
+							<td>属性名称</td>
+							<td><input id="name" name="name" type="text" class="form-control"></td>
+						</tr>
+						<tr class="submitTR">
+							<td colspan="2" align="center">
+								<input type="hidden" name="cid" th:attr="value=@{${c.id}}">
+								<button type="submit" class="btn btn-success">提 交</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div th:insert="~{/include/admin/adminFooter :: adminFooter}"></div>
+</body>
+</html>

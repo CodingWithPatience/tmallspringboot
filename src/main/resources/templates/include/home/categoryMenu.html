@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="cm">
+	<div class="categoryMenu">
+		<div  th:each="c : ${cs}">
+			<div th:attr="cid=@{${c.id}}" class="eachCategory">
+				<span class="glyphicon glyphicon-link"></span>
+				<a th:href="@{'/category/'+${c.id}}" th:inline="text" target="_blank">[[${c.name}]]</a>
+			</div>
+		</div>
+	</div>  
+</div>
+</html>

@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="top" th:fragment="top">
+	<nav class="top" >
+		<a th:href="@{/home}">
+			<span style="color:#FF0036;margin:0px" class="glyphicon glyphicon-home redColor"></span>
+			天猫首页
+		</a> 
+		<span>喵，欢迎来天猫</span>
+			<a href="#" th:if="${session.user}"><span th:inline="text">[[${session.user.name}]]</span></a>
+			<a th:href="@{/login}" th:if="${session.user == null}">请登陆</a>    
+			<a th:href="@{/logout}" th:if="${session.user}">退出</a>    
+			<a th:href="@{/register}" th:if="${session.user == null}">免费注册</a>   
+		<span class="pull-right">
+			<a th:href="@{/bought}">我的订单</a>
+			<a th:href="@{/cart}">
+				<span style="color:#FF0036;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>
+				购物车<strong th:if="${session.user}" th:inline="text">[[${session.cartTotalItemNumber}]]件 </strong>
+			</a>
+		</span>
+	</nav>
+</div>
+</html>

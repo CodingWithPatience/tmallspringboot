@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>分类管理</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+	
+	<script>
+    $(function(){
+			$("#addForm").submit(function(){
+				if(!checkEmpty("name","分类名称"))
+					return false;
+				if(!checkEmpty("categoryPic","分类图片"))
+					return false;
+				return true;
+			});
+    });
+	</script>
+	<div class="workingArea">
+    <h1 class="label label-info" >分类管理</h1>
+    <br>
+    <br>
+    <div class="listDataTableDiv">
+			<table class="table table-striped table-bordered table-hover  table-condensed">
+				<thead>
+					<tr class="success">
+						<th>ID</th>
+						<th>图片</th>
+						<th>分类名称</th>
+						<th>属性管理</th>
+						<th>产品管理</th>
+						<th>编辑</th>
+						<th>删除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c : ${cs}">
+						<td th:inline="text">[[${c.id}]]</td>
+						<td><img height="40px" th:attr="src=@{'/img/category/'+${c.id}+'.jpg'}"></td>
+						<td th:inline="text">[[${c.name}]]</td>
+						<td><a th:href="@{'/admin/property/list/'+${c.id}}"><span class="glyphicon glyphicon-th-list"></span></a></td>
+						<td><a th:href="@{'/admin/product/list/'+${c.id}}"><span class="glyphicon glyphicon-shopping-cart"></span></a></td>
+						<td><a th:href="@{'/admin/category/edit/'+${c.id}}"><span class="glyphicon glyphicon-edit"></span></a></td>
+						<td><a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/category/delete/'+${c.id}}"><span class="glyphicon glyphicon-trash"></span></a></td>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+    <div class="pageDiv">
+    	<div th:insert="~{/include/admin/adminPage :: adminPage}"></div>
+    </div>
+    <div class="panel panel-warning addDiv">
+			<div class="panel-heading">新增分类</div>
+			<div class="panel-body">
+				<form method="post" id="addForm" th:attr="action=@{/admin/category/add}" enctype="multipart/form-data">
+					<table class="addTable">
+						<tr>
+							<td>分类名称</td>
+							<td><input  id="name" name="name" type="text" class="form-control"></td>
+						</tr>
+						<tr>
+							<td>分类圖片</td>
+							<td>
+								<input id="categoryPic" accept="image/*" type="file" name="image" />
+							</td>
+						</tr>
+						<tr class="submitTR">
+							<td colspan="2" align="center">
+								<button type="submit" class="btn btn-success">提 交</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+    </div>
+	</div>
+	<div th:insert="~{/include/admin/adminFooter :: adminFooter}"></div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="pac">
+	<script th:inline="javascript">
+		// 随机改变某一分类下产品链接<a>标签内容的颜色，表示为推荐产品
+		function changeColorRandomly(cid){
+			$("div.productsAsideCategories[cid="+cid+"] div.row a").each(function(){
+				// 先清除css样式，使已改变颜色的<a>标签恢复原状
+				$(this).css("color","");
+				
+				var value = Math.round(Math.random() * 5);
+				if(value == 1)
+					$(this).css("color","#87CEFA");
+			});
+		}
+
+		var url = "jsondata/product/";
+		var cids = new Array();
+		function showProductSubtitle(cid) {
+			// cids存储已经加载过的产品相关联的分类id
+			// cids中含有相同的cid，则说明已经加载过相关产品信息,直接返回，防止重复加载数据
+			// 若未cids中不含有相同的cid，若productDetail中含有相应的产品信息
+			// 就从productDetail中取出，否则向后台请求数据
+			for(var i=0; i<cids.length; i++) {
+				if(cids[i] == cid)
+					return;
+			}
+			
+			// productDetail为存储产品信息的数组全局变量，在<head>标签中定义
+			// 动态加载产品信息时，将产品信息的存储到productDetail中去
+			if(productDetail.length > 0) {
+				for(i in productDetail) {
+					if(cid == productDetail[i]) {
+						showSubtitleDiv(productDetail[i]);
+						return;
+					}
+				}
+			}
+			
+			$.get(
+				url+cid,
+				function(data){
+					showSubtitleDiv(data, cid);
+					productWCategory.push(data);
+				}
+			);
+			cids.push(cid);
+		}
+
+		// 动态生成显示产品副标题的div
+		function showSubtitleDiv(data, cid) {
+			var div = document.createElement("div");
+			for(var i=0; i<data.length; i++) {
+				var subTitles = data[i].subTitle.split(" ");
+				var a = document.createElement("a");
+				var spanContainer = document.createElement("span");
+				a.setAttribute("href",getProjectPath()+"product/"+data[i].id);
+				a.setAttribute("target","_blank");
+
+				var span = document.createElement("span");
+				var spanText = document.createTextNode(subTitles[0]);
+				span.appendChild(spanText);
+				a.appendChild(span);
+				spanContainer.appendChild(a);
+				div.appendChild(spanContainer);	
+			}
+			$("div.productsAsideCategories[cid="+cid+"] div.row").prepend(div);
+		}
+	</script>
+	
+	<div th:each="c : ${cs}" >
+		<div th:attr="cid=@{${c.id}}" class="productsAsideCategories"> 
+			<div class="row show1">
+				<div class="seperator"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</html>

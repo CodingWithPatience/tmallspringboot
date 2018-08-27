@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>订单管理</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+
+	<script>
+		$(function(){
+			$("button.orderPageCheckOrderItems").click(function(){
+				var oid = $(this).attr("oid");
+				$("tr.orderPageOrderItemTR[oid="+oid+"]").toggle();
+			});
+		});
+	</script>
+
+	<div class="workingArea">
+		<h1 class="label label-info" >订单管理</h1>
+		<br>
+		<br>
+		<div class="listDataTableDiv">
+			<table class="table table-striped table-bordered table-hover1 table-condensed">
+				<thead>
+				<tr class="success">
+					<th>ID</th>
+					<th>状态</th>
+					<th>金额</th>
+					<th width="100px">商品数量</th>
+					<th width="100px">买家名称</th>
+					<th>创建时间</th>
+					<th>支付时间</th>
+					<th>发货时间</th>
+					<th>确认收货时间</th>
+					<th width="120px">操作</th>
+				</tr>
+				</thead>
+				<tbody  th:each="o : ${os}">
+					<tr>
+						<td th:inline="text">[[${o.id}]]</td>
+						<td th:inline="text">[[${o.statusDesc}]]</td>
+						<td th:inline="text">￥[[${#numbers.formatDecimal(o.total,0,'COMMA',2,'POINT')}]]</td>
+						<td align="center" th:inline="text">[[${o.totalNumber}]]</td>
+						<td align="center" th:inline="text">[[${o.user.name}]]</td>
+						<td th:inline="text">[[${#dates.format(o.createDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+						<td th:inline="text">[[${#dates.format(o.payDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+						<td th:inline="text">[[${#dates.format(o.deliveryDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+						<td th:inline="text">[[${#dates.format(o.confirmDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+						<td>
+							<button th:attr="oid=@{${o.id}}" class="orderPageCheckOrderItems btn btn-primary btn-xs">查看详情</button>
+							<a th:href="@{'/admin/order/delivery/'+${o.id}}" th:if="${o.status=='waitDelivery'}">
+								<button class="btn btn-primary btn-xs">发货</button>
+							</a>
+						</td>
+					</tr>
+					<tr class="orderPageOrderItemTR"  th:attr="oid=@{${o.id}}">
+						<td colspan="10" align="center">
+							<div  class="orderPageOrderItem">
+								<table width="800px" align="center" class="orderPageOrderItemTable">
+									<tr th:each="oi : ${o.orderItems}">
+										<td align="left">
+											<img width="40px" height="40px" th:attr="src=@{'/img/productSingle/'+${oi.product.firstProductImage.id}+'.jpg'}">
+										</td>
+										<td>
+											<a th:href="@{'/product/'+${oi.product.id}}">
+												<span th:inline="text">[[${oi.product.name}]]</span>
+											</a>
+										</td>
+										<td align="right">
+											<span class="text-muted" th:inline="text">[[${oi.number}]]个</span>
+										</td>
+										<td align="right">
+											<span class="text-muted" th:inline="text">单价：￥[[${oi.product.promotePrice}]]</span>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="pageDiv">
+			<div th:insert="~{/include/admin/adminPage :: adminPage}"></div>
+		</div>
+		<div th:insert="~{/include/admin/adminFooter :: adminFooter}"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="simpleSearch">
+	<a href="home">
+		<img id="simpleLogo" class="simpleLogo" th:attr="src=@{/img/site/simpleLogo2.png}">	
+	</a>
+	<form th:attr="action=@{/search}" method="post" >	
+	<div class="simpleSearchDiv pull-right">
+		<input type="text" placeholder="天猫-理想生活" name="keyword">
+		<button class="searchButton" type="submit">搜天猫</button>
+		<div class="searchBelow">
+			<span th:each="c,cstat : ${cs}" th:if="${cstat.count>=8 and cstat.count<=11}">
+				<a th:href="@{'category/'+${c.id}" th:text="${c.name}"></a>
+				<span th:if="${cstat.count!=11}">|</span>				
+			</span>			
+		</div>
+	</div>
+	</form>
+	<div style="clear:both"></div>
+</div>
+</html>

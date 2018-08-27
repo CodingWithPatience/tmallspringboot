@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>用户管理</title>
+<link rel="shortcut icon" type="image/x-icon" 
+	th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+</head>
+<body>
+	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
+	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+
+	<div class="workingArea">
+		<h1 class="label label-info" >用户管理</h1>
+		<br>
+		<br>
+		<div class="listDataTableDiv">
+			<table class="table table-striped table-bordered table-hover table-condensed">
+				<thead>
+				<tr class="success">
+					<th>ID</th>
+					<th>用户名称</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr th:each="u : ${us}">
+						<td th:inline="text">[[${u.id}]]</td>
+						<td th:inline="text">[[${u.name}]]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="pageDiv">
+			<div th:insert="~{/include/admin/adminPage :: adminPage}"></div>
+		</div>
+		<div th:insert="~{/include/admin/adminFooter :: adminFooter}"></div>
+	</div>
+</body>
+</html>

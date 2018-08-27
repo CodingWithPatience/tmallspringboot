@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="aliPayPageDiv" th:fragment="alipayPage">
+	<div class="aliPayPageLogo">
+		<img class="pull-left" th:attr="src=@{/img/site/simpleLogo.png}">
+		<div style="clear:both"></div>
+	</div>
+	<div>
+		<span class="confirmMoneyText">扫一扫付款（元）</span>
+		<span class="confirmMoney" th:inline="text">[[${#numbers.formatDecimal(total,0,'COMMA',2,'POINT')}]]</span>
+	</div>
+	<div>
+		<img class="aliPayImg" th:attr="src=@{/img/site/alipay2wei.png}">
+	</div>
+	<div>
+		<a th:href="@{'/payed/'+${oid}+'/'+${total}}"><button class="confirmPay">确认支付</button></a>
+	</div>
+</div>
+</html>

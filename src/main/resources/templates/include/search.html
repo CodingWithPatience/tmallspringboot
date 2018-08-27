@@ -1,0 +1,159 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="search">
+	<script th:inline="javascript">
+	//原生js方法，通过xmlHttpRequest对象实现智能搜索框提示
+	/* 	var xmlHttp;
+		function getTip(){
+			var keyword=document.getElementById("keyword");
+			if(keyword.value==""){
+				clearContent();
+				return;
+			}
+			xmlHttp=createXMLHttp();
+			url="searchtip?keyword="+keyword.value;
+			xmlHttp.open("GET",url,true);
+			xmlHttp.send(null);
+			xmlHttp.onreadystatechange=callback;
+		}
+		
+		function createXMLHttp(){
+			var xmlHttp;
+			if(window.XMLHttpRequest){
+				xmlHttp=new XMLHttpRequest();
+			}
+			if(window.ActiveXObject){
+				xmlHttp=new ActiveXObject("Microsoft.XMLHTTP")
+				if(!xmlHttp){
+					xmlHttp=new ActiveXObject("Msxml2.XMLHTTP")
+				}
+			}
+			return xmlHttp;
+		}
+		
+		function callback(){
+			if(xmlHttp.readyState==4){	
+				if(xmlHttp.status==200){
+					var result=xmlHttp.responseText;
+					var jsonResult=eval("("+result+")");
+					setContent(jsonResult);
+				}	
+			}
+		} */
+		//在搜索框下方显示提示内容，纯js方法
+		function setContent(contents){
+			setLocation();
+			clearContent();
+			var size=contents.length;
+			for(var i=0; i<size; i++){
+				var nextNode=contents[i];
+				var tr=document.createElement("tr");
+				var td=document.createElement("td");
+				td.setAttribute("border","0");
+				td.setAttribute("bgcolor","#FFFAFA");
+				td.onmouseover=function(){
+					this.className='mouseOver';
+					document.getElementById("keyword").value=this.innerHTML;
+				};
+				td.onmouseout=function(){
+					this.className='mouseOut';
+				};
+				td.onmousedown=function(){
+					document.getElementById("keyword").value=this.innerHTML;
+					clearContent();
+				}		
+				var text=document.createTextNode(nextNode);
+				td.appendChild(text);
+				tr.appendChild(td);
+				document.getElementById("contentTableBody").appendChild(tr);
+			}
+		}
+		
+		// 清空提示内容
+		function clearContent() {
+			var contentTableBody=document.getElementById("contentTableBody");
+			var size=contentTableBody.childNodes.length;
+			for(var i=size-1; i>=0; i--){
+				contentTableBody.removeChild(contentTableBody.childNodes[i]);
+			}
+			document.getElementById("searchContent").style.border="none";
+		}
+		
+		// 设置提示内容的位置
+		function setLocation(){
+			var input=document.getElementById("keyword");
+			var width=input.offsetWidth;
+			var left=input["offsetLeft"];
+			var top=input["offsetTop"]+input.offsetHeight;
+			var searchDiv=document.getElementById("searchContent");
+			searchDiv.style.border="black 1px solid";
+			searchDiv.style.left=left+"px";
+			searchDiv.style.top=top+"px";
+			searchDiv.style.width=width+"px";
+			document.getElementById("contentTable").style.width=width+"px";
+		}
+		
+		// 输入框失去焦点时，清空提示内容
+		function keywordBlur() {
+			clearContent();
+		}
+		
+		// keyup事件与focus事件触发时，向后台获取数据，并在搜索框下显示
+		$(function(){
+			var url="jsondata/searchtip";
+			$("#keyword").keyup(function(){
+				var keyword = $(this).val();
+				if(keyword==""){
+					clearContent();
+					return;
+				}
+				$.get(
+					url,
+					{"keyword":keyword},
+					function(result){
+						setContent(result);
+					}
+				);
+			});
+			$("#keyword").focus(function(){
+				var keyword = $(this).val();
+				if(keyword==""){
+					clearContent();
+					return;
+				}
+				$.get(
+					url,
+					{"keyword":keyword},
+					function(result){
+						setContent(result);
+					}
+				);
+			});
+		});
+	</script>
+	<a th:href="@{/home}">
+		<img id="logo" th:attr="src=@{/img/site/logo2.gif}" class="logo">
+	</a>
+	<form th:attr="action=@{/search}" method="post" target="blank">	
+		<div class="searchDiv">
+			<input id="keyword" name="keyword" type="text" placeholder="天猫-理想生活" onblur="keywordBlur()" >
+			<button  type="submit" class="searchButton">搜索</button>
+			<div id="searchContent">
+				<table id="contentTable">
+					<tbody id="contentTableBody"></tbody>
+				</table>
+			</div>
+			<div class="searchBelow">
+				<span th:each="c,cStat : ${cs}" >
+					<span th:if="${cStat.count>=10 and cStat.count<13}">
+						<a th:href="@{'/category/'+${c.id}}" th:inline="text" target="_blank">[[${c.name}]]</a>
+						<span>|</span>
+					</span>
+					<span th:if="${cStat.count==13}">
+						<a th:href="@{'/category/'+${c.id}}" th:inline="text" target="_blank">[[${c.name}]]</a>
+					</span>
+				</span>		
+			</div>
+		</div>
+	</form>	
+</div>
+</html>

@@ -1,0 +1,48 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="searchResultPage">
+	<!-- <script th:inline="javascript">
+ 	function onbeforeunload_handler(){ 
+		window.location.href = "login";
+	}
+	window.attachEvent("onbeforeunload",onbeforeunload_handler());
+ 
+ var keyword = [[${keyword}]];
+ document.onkeydown = function(e){
+	    e = window.event || e;
+	    var keycode = e.keyCode || e.which;
+ 	    if(keycode == 116){
+	    	console.log(window.location.href);
+	        if(window.event){// ie
+	            try{e.keyCode = 0;}catch(e){}
+	            window.location.href = "search";
+	            console.log(window.location.href);
+	            e.returnValue = false;  
+	        }else{// firefox
+	            e.preventDefault(); 
+	            window.location.href = "search";
+	            console.log(window.location.href);
+	        }
+	    } 
+	}
+ </script> -->
+	<div class="searchResultDiv">
+		<div class="searchProducts" >
+			<div class="productUnit" th:each="p : ${ps}" th:attr="price=@{${p.promotePrice}}">
+				<a th:href="@{'/product/'+${p.id}}">
+					<img class="productImage" th:attr="src=@{'/img/productSingle/'+${p.firstProductImage.id}+'.jpg'}">
+				</a>
+				<span class="productPrice" th:inline="text">¥[[${#numbers.formatDecimal(p.promotePrice,0,'COMMA',2,'POINT')}]]</span>
+				<a class="productLink" th:href="@{'/product/'+${p.id}}" th:inline="text">[[${p.name}]]</a>
+				<a class="tmallLink" th:href="@{'/product/'+${p.id}}">天猫专卖</a>
+				<div class="productInfo">
+					<span class="monthDeal ">月成交 <span class="productDealNumber" th:inline="text">[[${p.saleCount}]]笔</span></span>
+					<span class="productReview">评价<span class="productReviewNumber" th:inline="text">[[${p.reviewCount}]]</span></span>
+					<span class="wangwang"><img th:attr="src=@{/img/site/wangwang.png}"></span>
+				</div>
+			</div>
+			<div class="noMatch" th:if="${#lists.isEmpty(ps)}">没有满足条件的产品</div>
+			<div style="clear:both"></div>
+		</div>
+	</div>
+</div>
+</html>

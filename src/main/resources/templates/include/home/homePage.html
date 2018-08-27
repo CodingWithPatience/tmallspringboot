@@ -1,0 +1,8 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="homePage">
+<div class="homepageDiv">
+	<div th:insert="~{include/home/categoryAndcarousel :: cac}"></div>
+  <div th:insert="~{include/home/homePageCategoryProducts :: hcp}"></div> 
+</div>
+</div>
+</html>

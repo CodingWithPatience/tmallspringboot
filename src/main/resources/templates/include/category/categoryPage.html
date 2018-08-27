@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div id="category" th:fragment="categoryPage">
+	<div class="categoryPageDiv">
+		<img th:attr="src=@{'/img/category/'+${c.id}+'.jpg'}">
+		<div th:insert="~{/include/category/sortBar :: sortBar}"></div>
+		<div th:insert="~{/include/category/productByCategory :: pbc}"></div>
+	</div>
+</div>
+</html>
