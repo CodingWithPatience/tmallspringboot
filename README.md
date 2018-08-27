@@ -5,11 +5,11 @@
 ### 知识点
 #### 1、Java基础
 #### 2、框架
-&nbsp;&nbsp;spring、spring boot、mybitas
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spring、spring boot、mybitas
 #### 3、数据库
-&nbsp;&nbsp;MySQL
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MySQL
 #### 4、前端知识
-&nbsp;&nbsp;html、css、JavaScript、jQuery<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;html、css、JavaScript、jQuery<br><br>
 ***
 ### 项目展示
 图片展示<br>
