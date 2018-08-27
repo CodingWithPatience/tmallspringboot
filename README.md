@@ -1,9 +1,9 @@
-# tmallspringboot<br>
-## 模仿天猫项目，spring boot实现版本<br>
+# tmallspringboot
+## 模仿天猫项目，spring boot实现版本
 ### 知识点
 #### 1、Java基础
 #### 2、框架
-##### spring、spring boot、mybitas<
+##### spring、spring boot、mybitas
 #### 3、数据库
 ##### MySQL
 #### 4、前端知识
