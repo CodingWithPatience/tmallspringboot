@@ -1,13 +1,16 @@
-# tmallspringboot
-## 模仿天猫项目，spring boot实现版本
+# 项目名称：tmallspringboot
+***
+## 项目描述：模仿天猫项目，spring boot实现版本
+***
 ### 知识点
 #### 1、Java基础
 #### 2、框架
-##### spring、spring boot、mybitas
+&nbsp;&nbsp;spring、spring boot、mybitas
 #### 3、数据库
-##### MySQL
+&nbsp;&nbsp;MySQL
 #### 4、前端知识
-##### html、css、JavaScript、jQuery<br><br>
+&nbsp;&nbsp;html、css、JavaScript、jQuery<br><br>
+***
 ### 项目展示
 图片展示<br>
 ![购物车](https://github.com/CodingWithPatience/tmallspringboot/blob/master/projectCapture/fore/cart.png "模仿天猫项目-购物车")<br><br>
