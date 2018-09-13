@@ -1,6 +1,6 @@
 # 项目名称：tmallspringboot
 ***
-## 项目描述：模仿天猫项目，spring boot实现版本
+## 项目描述：模仿天猫项目，spring boot实现
 ***
 ### 知识点
 #### 1、Java基础
@@ -9,7 +9,7 @@
 #### 3、数据库
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MySQL
 #### 4、前端知识
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;html、css、JavaScript、jQuery<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;html、css、bootstrap、JavaScript、jQuery<br><br>
 ***
 ### 项目展示
 图片展示<br>
