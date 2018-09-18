@@ -1,11 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="adminHeader">
-	<script th:attr="src=@{/js/jquery/2.0.0/jquery.min.js}"></script>
-	<link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet" 
-				th:href="@{/css/bootstrap/3.3.6/bootstrap.min.css}"/>
-	<script th:attr="src=@{/js/bootstrap/3.3.6/bootstrap.min.js}"></script>
-	<link href="css/back/style.css" rel="stylesheet"
-				th:href="@{/css/back/style.css}"/>
+	<script th:attr="src=@{/js/jquery/3.3.1/jquery-3.3.1.min.js}"></script>
+	<link th:href="@{/css/bootstrap/4.1.3/bootstrap.min.css}" rel="stylesheet"> 
+	<link th:href="@{/css/bootstrap/MDB/mdb.min.css}" rel="stylesheet"> 
+	<script th:attr="src=@{/js/bootstrap/4.1.3/bootstrap.min.js}"></script>
+	<script th:attr="src=@{/js/bootstrap/MDB/mdb.min.js}"></script>
+	<link th:href="@{/css/back/style.css}" rel="stylesheet">
+	
+	<link rel="stylesheet"
+	  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet"
+	  href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
 				
 	<script th:inline="javascript">
 		function checkEmpty(id, name){

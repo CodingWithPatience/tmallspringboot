@@ -6,14 +6,46 @@
 	</div>
 	<div class="productParamterPart">
 		<div class="productParamter">产品参数：</div>
-		
 		<div class="productParamterList" th:each="pv : ${pvs}">
 			<span th:inline="text">[[${pv.property.name}]]: [[${pv.value}]]</span>
 		</div>
 		<div style="clear:both"></div>
 	</div>
-	<div class="productDetailImagesPart" th:each="pi : ${p.productDetailImages}">
-		<img th:attr="src=@{'/img/productDetail/'+${pi.id}+'.jpg'}">
-	</div>
+	
+	<script th:inline="javascript">
+		// 存储产品图片信息
+		var productIamges = [[${p.productDetailImages}]];
+		var count = 0;
+		var callback = loadProductImage;   // 将函数赋值给callback
+		
+		// 页面加载完毕后，执行函数
+		$(function(){
+			// 绑定scroll事件，监听下拉动作
+			// 该函数定义在header.html
+			bindScrollEvent(callback, count);
+		})
+		
+		// 加载产品图片
+	  function loadProductImage(count) {
+			// 每次函数调用，加载一张图片
+			for(var i in productIamges) {
+				if(i == count) {
+					var productImage = productIamges[i];
+					
+					var img = document.createElement("img");
+					img.setAttribute("src", getProjectPath()+"img/productDetail/"+productImage.id+".jpg");
+					
+					var div = document.createElement("div");
+					div.className = "productDetailImagesPart";
+					
+					div.appendChild(img);
+					$("div.productDetailDiv").append(div);
+				}
+				// 图片加载完毕，解绑scroll事件
+				if(count >= productIamges.length)
+					$(window).unbind("scroll");
+			}			
+		}
+	</script>
 </div>
 </html>

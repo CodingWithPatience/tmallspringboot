@@ -4,33 +4,34 @@
 		$(function () {
 			var curUrl = document.location.href;
 			$("#adminNav").find("a").each(function(){
-				if(curUrl.indexOf("category") > 0 && $(this).attr("href").indexOf("category") > 0)
-					$(this).parent().addClass("active");
-				
 				if(curUrl.indexOf("order") > 0 && $(this).attr("href").indexOf("order") > 0)
 					$(this).parent().addClass("active");
-				
-				if(curUrl.indexOf("user") > 0 && $(this).attr("href").indexOf("user") > 0)
+				else if(curUrl.indexOf("user") > 0 && $(this).attr("href").indexOf("user") > 0)
 					$(this).parent().addClass("active");
+				else
+					if($(this).attr("href").indexOf("category") > 0) {
+						if(curUrl.indexOf("order") < 0 && curUrl.indexOf("user") < 0)
+							$(this).parent().addClass("active");
+					}
 			});	
 		})
 	</script>
-	<nav id="adminNav" class="navbar navbar-default navbar-fixed-top navbar-inverse">
-		<ul class="nav navbar-nav nav-default">
-			<li>
+	<nav id="adminNav" class="navbar navbar-expand-lg navbar-dark stylish-color-dark">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
 				<img style="margin-left:10px;margin-right:0px" class="pull-left" th:attr="src=@{/img/site/tmallbuy.png}" height="45px">
 			</li>
-			<li>
-				<a class="navbar-brand" href="#nowhere">天猫后台</a>
+			<li class="nav-item">
+				<a class="nav-link" href="#">天猫后台</a>
 			</li>
-			<li>
-				<a class="navbar-brand" th:href="@{/admin/category/list}">分类管理</a>
+			<li class="nav-item">
+				<a class="nav-link" th:href="@{/admin/category/list}">分类管理</a>
 			</li>
-			<li>
-				<a class="navbar-brand" th:href="@{/admin/user/list}">用户管理</a>
+			<li class="nav-item">
+				<a class="nav-link" th:href="@{/admin/user/list}">用户管理</a>
 			</li>
-			<li>
-				<a class="navbar-brand" th:href="@{/admin/order/list}">订单管理</a>
+			<li class="nav-item">
+				<a class="nav-link" th:href="@{/admin/order/list}">订单管理</a>
 			</li>
 		</ul>
 	</nav>

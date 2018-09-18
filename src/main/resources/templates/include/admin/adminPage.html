@@ -2,54 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="adminPage">
 	<script th:inline="javascript">
-		// 判断href是否为当前url，若是当前url，在li标签内添加class="disabled",
-		// 否则移除li标签内的class="diabled"
+		// 判断href是否为当前url，若是当前url，在li标签内添加class="active",
+		// 否则移除li标签内的class="active"
 		$(function () {
 			var curUrl = document.location.href;
+			curUrl = curUrl.split(";")[0];
 			var pathName = document.location.pathname;
+			pathName = pathName.split(";")[0];
 			var pos = curUrl.indexOf(pathName);
 			var subUrl = curUrl.substring(pos, curUrl.length);
 			$("ul.pagination").find("a").each(function () {
 				var url = $(this).attr("href");
+				url = url.split(";")[0];
 				if (subUrl == url) {
-					$(this).parent().addClass("disabled");
+					var li = $(this).parent();
+					var firstOrList = false;
+					firstOrList = isfirstOrList(li);
+					if(!firstOrList)
+						li.addClass("active");
 				} else {
-					$(this).parent().removeClass("disabled");
+					if(subUrl.indexOf("page")<0){
+						var urlArr = url.split("/");
+						var pageNum = urlArr[urlArr.length-1];
+						if("page1" == pageNum){
+							var li = $(this).parent();
+							var firstOrList = false;
+							firstOrList = isfirstOrList(li);
+							if(!firstOrList)
+								li.addClass("active");
+						}
+					}
 				}
 			});
 		})
+		
+		function isfirstOrList(li){
+			var clazz = li.attr("class");
+			var clazzArr = clazz.split(" ");
+			for(var i in clazzArr){
+				if(clazzArr[i]=="previous" || clazzArr[i]=="next"){
+					li.addClass("disabled");
+					return true;
+				}
+			}
+			return false;
+		}
 		// 使href属性值为当前url的a标签点击无效
 		// 通过class="diabled"来获得href属性值为当前url的a标签
 		$(function(){
-			$("ul.pagination li.disabled a").click(function(){
+			$("ul.pagination li.active a").click(function(){
 				return false;
 			});
 		});
 	</script>
 
-	<nav>
-		<ul class="pagination" th:with="id=${page.id==null?'':page.id+'/'}">
-			<li>
-				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getFirstPage()}}" aria-label="Previous" >
+	<nav aria-label="pagination">
+		<ul class="pagination pagination-circle pg-blue mb-0 justify-content-center" th:with="id=${page.id==null?'':page.id+'/'}, pageParam=${page.getParam()}">
+			<li class="page-item previous">
+				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getFirstPage()}}" class="page-link" aria-label="Previous" >
 					<span aria-hidden="true">&laquo;</span>
+					<span class="sr-only">First</span>
 				</a>
 			</li>
-			<li>
-				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getPerviousPage()}}" aria-label="Previous" >
+			<li class="page-item previous">
+				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getPreviousPage()}}" class="page-link" aria-label="Previous" >
 					<span aria-hidden="true">&lsaquo;</span>
+					<span class="sr-only">Previous</span>
 				</a>
 			</li>    
-			<li th:each="page, stat : ${page.getPageList()}">
-				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getPage(stat.index*page.getCount())}}" th:inline="text">[[${stat.count}]]</a>
+			<li class="page-item" th:each="page, stat : ${page.getPageList()}">
+				<a th:with="pageNum=${page.getPageNum()}" th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${pageNum}}" class="page-link" th:inline="text">[[${pageNum}]]</a>
 			</li>
-			<li>
-				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getNextPage()}}" aria-label="Next">
+			<li class="page-item next">
+				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getNextPage()}}" class="page-link" aria-label="Next">
 					<span aria-hidden="true">&rsaquo;</span>
+					<span class="sr-only">Next</span>
 				</a>
 			</li>
-			<li>
-				<a th:href="@{'/admin/'+${page.param}+'/list/'+${id}+'page'+${page.getLastPage()}}" aria-label="Next">
+			<li class="page-item next">
+				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getLastPage()}}" class="page-link" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
+					<span class="sr-only">List</span>
 				</a>
 			</li>
 		</ul>

@@ -6,6 +6,7 @@
 		var count = 0;
 		var total = [[${cs.size()}]];
 		var cidArr = new Array();
+		var callback = queryProduct;     // 将函数赋值给callback
 		
 		// 页面渲染完之中执行的代码
 		$(function(){
@@ -15,14 +16,17 @@
 				cidArr.push(cid);
 			});
 			
+			// 先加载一次产品信息
+			queryProduct(count++);
+			
 			// 绑定事件，监听滚动条下拉的动作
-			bindScrollEvent();
+			// 该函数定义在header.html
+			bindScrollEvent(callback, count);
 			
 			// 隐藏包含footer部分的div，待动态加载完所有产品信息时再显示
 			$("div#footerDiv").hide();
 			
-			// 请求后台，加载产品信息
-			 queryProduct(count++); 
+			
 		});
 		
 		// 异步加载产品信息
@@ -50,6 +54,7 @@
 			}
 			// 产品信息加载完后，添加一张表示已经到底部的图片及显示footer部分
 			if(count > total) {
+				// 解绑scroll事件
 				$(window).unbind("scroll");
 				var img = document.createElement("img");
 				img.setAttribute("src",getProjectPath()+"img/site/end.png");
@@ -58,7 +63,6 @@
 				$("div.homePageCategoryProducts").append(img);
 				$("div#footerDiv").show();
 			}
-			
 		}
 		
 		// 将产品信息显示在div内
@@ -132,20 +136,6 @@
 			}
 			return div;
 		}
-		
-		function bindScrollEvent(){
-			// 添加滚动监听事件
-			$(window).scroll( function() {
-				var docHeight = $(document).height(); // 获取整个页面的高度
-				var winHeight = $(window).height(); // 获取当前窗体的高度
-				var winScrollHeight = $(window).scrollTop(); // 获取滚动条滚动的距离
-				if(docHeight -30 <= winHeight + winScrollHeight){
-					// 加载更多的产品数据
-					queryProduct(count++);
-				}
-					
-			});
-		} 
 	</script> 
 
 	<div class="homePageCategoryProducts" ></div>

@@ -29,19 +29,19 @@
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
-			<li class="active" th:inline="text">[[${p.name}]]</li>
-			<li class="active">产品图片管理</li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="breadcrumb-item active" th:inline="text">[[${p.name}]]</li>
+			<li class="breadcrumb-item active">产品图片管理</li>
 		</ol>
 
 		<table class="addPictureTable" align="center">
 			<tr>
 				<td class="addPictureTableTD">
 					<div>
-						<div class="panel panel-warning addPictureDiv">
-							<div class="panel-heading">新增产品<b class="text-primary"> 单个 </b>图片</div>
-							<div class="panel-body">
+						<div class="card border-dark mb-3 addPictureDiv">
+							<div class="card-header">新增产品<b class="text-primary"> 单个 </b>图片</div>
+							<div class="card-body text-dark">
 								<form method="post" class="addFormSingle" th:attr="action=@{/admin/productImage/add}" enctype="multipart/form-data">
 									<table class="addTable">
 										<tr>
@@ -63,9 +63,9 @@
 								</form>
 							</div>
 						</div>
-						<table class="table table-striped table-bordered table-hover  table-condensed">
-							<thead>
-							<tr class="success">
+						<table class="table table-sm">
+							<thead class="grep lighten-5">
+							<tr>
 								<th>ID</th>
 								<th>产品单个图片缩略图</th>
 								<th>删除</th>
@@ -79,7 +79,7 @@
 									</td>
 									<td>
 										<a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/productImage/delete/'+${pi.id}+'?pid='+${p.id}}">
-											<span class="glyphicon glyphicon-trash"></span>
+											<span class="fa fa-trash-o" aria-hidden="true"></span>
 										</a>
 									</td>
 								</tr>
@@ -89,9 +89,9 @@
 				</td>
 				<td class="addPictureTableTD">
 					<div>
-						<div class="panel panel-warning addPictureDiv">
-							<div class="panel-heading">新增产品<b class="text-primary"> 详情 </b>图片</div>
-							<div class="panel-body">
+						<div class="card border-dark mb-3 addDiv">
+							<div class="card-header">新增产品<b class="text-primary"> 详情 </b>图片</div>
+							<div class="card-body text-dark">
 								<form method="post" class="addFormDetail" th:attr="action=@{/admin/productImage/add}" enctype="multipart/form-data">
 									<table class="addTable">
 										<tr>
@@ -113,9 +113,9 @@
 								</form>
 							</div>
 						</div>
-						<table class="table table-striped table-bordered table-hover  table-condensed">
-							<thead>
-							<tr class="success">
+						<table class="table table-sm">
+							<thead class="grep lighten-5">
+							<tr>
 								<th>ID</th>
 								<th>产品详情图片缩略图</th>
 								<th>删除</th>
@@ -129,7 +129,7 @@
 									</td>
 									<td>
 										<a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/productImage/delete/'+${pi.id}+'?pid='+${p.id}}">
-											<span class="glyphicon glyphicon-trash"></span>
+											<span class="fa fa-trash-o" aria-hidden="true"></span>
 										</a>
 									</td>
 								</tr>

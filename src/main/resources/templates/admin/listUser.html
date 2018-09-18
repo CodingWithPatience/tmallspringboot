@@ -11,16 +11,15 @@
 	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
 
 	<div class="workingArea">
-		<h1 class="label label-info" >用户管理</h1>
-		<br>
+		<label class="tab" >用户管理</label>
 		<br>
 		<div class="listDataTableDiv">
-			<table class="table table-striped table-bordered table-hover table-condensed">
-				<thead>
-				<tr class="success">
-					<th>ID</th>
-					<th>用户名称</th>
-				</tr>
+			<table class="table table-sm">
+				<thead class="grey lighten-5">
+					<tr>
+						<th>ID</th>
+						<th>用户名称</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="u : ${us}">

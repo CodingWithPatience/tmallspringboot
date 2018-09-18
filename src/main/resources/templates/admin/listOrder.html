@@ -20,24 +20,23 @@
 	</script>
 
 	<div class="workingArea">
-		<h1 class="label label-info" >订单管理</h1>
-		<br>
+		<label class="tab">订单管理</label>
 		<br>
 		<div class="listDataTableDiv">
-			<table class="table table-striped table-bordered table-hover1 table-condensed">
-				<thead>
-				<tr class="success">
-					<th>ID</th>
-					<th>状态</th>
-					<th>金额</th>
-					<th width="100px">商品数量</th>
-					<th width="100px">买家名称</th>
-					<th>创建时间</th>
-					<th>支付时间</th>
-					<th>发货时间</th>
-					<th>确认收货时间</th>
-					<th width="120px">操作</th>
-				</tr>
+			<table class="table table-sm">
+				<thead class="grey lighten-5">
+					<tr>
+						<th>ID</th>
+						<th>状态</th>
+						<th>金额</th>
+						<th width="100px">商品数量</th>
+						<th width="100px">买家名称</th>
+						<th>创建时间</th>
+						<th>支付时间</th>
+						<th>发货时间</th>
+						<th>确认收货时间</th>
+						<th width="120px">操作</th>
+					</tr>
 				</thead>
 				<tbody  th:each="o : ${os}">
 					<tr>
@@ -51,9 +50,9 @@
 						<td th:inline="text">[[${#dates.format(o.deliveryDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 						<td th:inline="text">[[${#dates.format(o.confirmDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 						<td>
-							<button th:attr="oid=@{${o.id}}" class="orderPageCheckOrderItems btn btn-primary btn-xs">查看详情</button>
+							<button type="button" th:attr="oid=@{${o.id}}" class="btn btn-indigo orderPageCheckOrderItems">查看详情</button>
 							<a th:href="@{'/admin/order/delivery/'+${o.id}}" th:if="${o.status=='waitDelivery'}">
-								<button class="btn btn-primary btn-xs">发货</button>
+								<button class="btn btn-primary btn-sm">发货</button>
 							</a>
 						</td>
 					</tr>

@@ -15,8 +15,8 @@
 			$("#editForm").submit(function() {
 				if (!checkEmpty("name", "产品名称"))
 						return false;
-//			if (!checkEmpty("subTitle", "小标题"))
-//				return false;
+				if (!checkEmpty("subTitle", "小标题"))
+					return false;
 				if (!checkNumber("originalPrice", "原价格"))
 						return false;
 				if (!checkNumber("promotePrice", "优惠价格"))
@@ -30,15 +30,15 @@
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li><a th:href="@{'/admin/product/list/'${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
-			<li class="active" th:inline="text">[[${p.name}]]</li>
-			<li class="active">编辑产品</li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="breadcrumb-item active" th:inline="text">[[${p.name}]]</li>
+			<li class="breadcrumb-item active">编辑产品</li>
 		</ol>
 
-		<div class="panel panel-warning editDiv">
-			<div class="panel-heading">编辑产品</div>
-			<div class="panel-body">
+		<div class="card border-dark mb-3 editDiv">
+			<div class="card-header">编辑产品</div>
+			<div class="card-body text-dark">
 				<form method="post" id="editForm" th:attr="action=@{/admin/product/update}">
 					<table class="editTable">
 						<tr>

@@ -1,16 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="header">
-	<script th:attr="src=@{/js/jquery/2.0.0/jquery.min.js}"></script>
-	<link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet" 
-				th:href="@{/css/bootstrap/3.3.6/bootstrap.min.css}"/>
-	<script th:attr="src=@{/js/bootstrap/3.3.6/bootstrap.min.js}"></script>
-	<link href="css/fore/style.css" rel="stylesheet"
-				th:href="@{/css/fore/style.css}"/>
+	<script th:attr="src=@{/js/jquery/3.3.1/jquery-3.3.1.min.js}"></script>
+	<link th:href="@{/css/bootstrap/4.1.3/bootstrap.min.css}" rel="stylesheet"> 
+	<link th:href="@{/css/bootstrap/4.1.3/bootstrap-grid.min.css}" rel="stylesheet"> 
+	<link th:href="@{/css/bootstrap/4.1.3/bootstrap-reboot.min.css}" rel="stylesheet"> 
+	<link th:href="@{/css/bootstrap/MDB/mdb.min.css}" rel="stylesheet"> 
+	<script th:attr="src=@{/js/bootstrap/4.1.3/bootstrap.min.js}"></script>
+	<script th:attr="src=@{/js/bootstrap/MDB/mdb.min.js}"></script>
+	<link th:href="@{/css/fore/style.css}" rel="stylesheet">
+	
+	<link rel="stylesheet"
+	  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet"
+	  href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
+	
 				
 	<link rel="shortcut icon" type="image/x-icon" 
-		th:href="@{/img/site/tmallIcon.ico}" media="screen" />
+			th:href="@{/img/site/tmallIcon.ico}" media="screen" />
 	
 	<script th:inline="javascript">
+		// 格式化金额
 		function formatMoney(num){
 			num = num.toString().replace(/\$|\,/g,'');  
 			if(isNaN(num))  
@@ -55,7 +64,7 @@
 				$("div.orderItemSumDiv").css("height","100px");
 			});
 			
-			$("div#footer a[href$=#nowhere]").click(function(){
+			$("div#footer a").click(function(){
 				alert("模仿天猫的连接，并没有跳转到实际的页面");
 			});
 			
@@ -63,7 +72,7 @@
 				alert("模仿旺旺的图标，并不会打开旺旺");
 			});
 			$("a.notImplementLink").click(function(){
-				alert("这个功能没做，蛤蛤~");
+				alert("这个功能没做");
 			});
 			
 		});
@@ -82,15 +91,55 @@
 		
 		// 格式化金额，保留两位小数
 		function formatMoney2(num) {   
-		   num = parseFloat((num + "").replace(/[^\d\.-]/g, "")).toFixed(2) + "";   
-		   var intPart = num.split(".")[0].split("").reverse();   
-		   var floatPart = num.split(".")[1];   
-		   var result = "";   
-		   for(i = 0; i < intPart.length; i ++ ) {   
-		      result += intPart[i] + ((i + 1) % 3 == 0 && (i + 1) != intPart.length ? "," : "");   
-		   }   
-		   return result.split("").reverse().join("") + "." + floatPart;   
+		  num = parseFloat((num + "").replace(/[^\d\.-]/g, "")).toFixed(2) + "";   
+		  var intPart = num.split(".")[0].split("").reverse();   
+		  var floatPart = num.split(".")[1];   
+		  var result = "";   
+		  for(i = 0; i < intPart.length; i ++ ) {   
+		    result += intPart[i] + ((i + 1) % 3 == 0 && (i + 1) != intPart.length ? "," : "");   
+		  }   
+		  return result.split("").reverse().join("") + "." + floatPart;   
 		} 
+		
+		// 格式化日期
+		Date.prototype.format = function(fmt) { 
+			var o = { 
+				"M+" : this.getMonth()+1,                 //月份 
+				"d+" : this.getDate(),                    //日 
+				"h+" : this.getHours(),                   //小时 
+				"m+" : this.getMinutes(),                 //分 
+				"s+" : this.getSeconds(),                 //秒 
+				"q+" : Math.floor((this.getMonth()+3)/3), //季度 
+				"S"  : this.getMilliseconds()             //毫秒 
+			}; 
+			if(/(y+)/.test(fmt)) {
+				fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+			}
+			for(var k in o) {
+			  if(new RegExp("("+ k +")").test(fmt)){
+						 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+				}
+			}
+			return fmt; 
+		}        
+		
+		// 绑定scroll事件
+		function bindScrollEvent(callback, count, status) {
+			status = status || null;
+			$(window).scroll( function() {
+				var docHeight = $(document).height(); // 获取整个页面的高度
+				var winHeight = $(window).height(); // 获取当前窗体的高度
+				var winScrollHeight = $(window).scrollTop(); // 获取滚动条滚动的距离
+				// 当滚动条距底部只有1/3屏幕距离时，调用函数加载数据
+				if(docHeight*0.67 <= winHeight + winScrollHeight){
+					// 加载更多的数据
+					if(status == null)
+						callback(count++);
+					else
+						callback(count++, status)
+				}
+			});
+		}
 	</script>	
 </head>
 </html>

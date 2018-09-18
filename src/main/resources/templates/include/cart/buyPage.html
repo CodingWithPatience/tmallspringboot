@@ -80,7 +80,7 @@
 				</tbody>
 			</table>
 			<div class="orderItemSumDiv">
-				<div class="pull-left">
+				<div class="float-left">
 					<span class="leaveMessageText">给卖家留言:</span>
 					<span>
 						<img class="leaveMessageImg" th:attr="src=@{/img/site/leaveMessage.png}">
@@ -95,7 +95,7 @@
 		</div>
 
 		<div class="orderItemTotalSumDiv">
-			<div class="pull-right"> 
+			<div class="float-right"> 
 				<span>实付款：</span>
 				<span class="orderItemTotalSumSpan" th:inline="text">￥[[${#numbers.formatDecimal(total,0,'COMMA',2,'POINT')}]]</span>
 			</div>

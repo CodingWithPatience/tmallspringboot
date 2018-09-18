@@ -34,10 +34,10 @@
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
-			<li class="active" th:inline="text">[[${p.name}]]</li>
-			<li class="active">编辑产品属性</li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="breadcrumb-item active" th:inline="text">[[${p.name}]]</li>
+			<li class="breadcrumb-item active">编辑产品属性</li>
 		</ol>
 		<div class="editPVDiv">
 			<div class="eachPV" th:each="pv : ${pvs}">
