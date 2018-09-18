@@ -1752,6 +1752,20 @@ button.orderListItemConfirm:hover {
 	background-color: #118ADB;
 }
 
+button.ask2delivery {
+	background-color: #33b5e5;
+	border-radius: 2px;
+	color: white;
+	font-size: 10px;
+	font-weight: bold;
+	border-width: 0px;
+	padding: 6px 6px;
+} 
+
+button.ask2delivery:hover {
+	background-color: #0099CC;
+} 
+
 button.orderListItemReview {
 	border: 1px solid #DCDCDC;
 	background-color: #fff;
