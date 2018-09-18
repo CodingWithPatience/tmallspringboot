@@ -38,10 +38,6 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("")
 public class ForeController {
 	
-	private final static String ALL = "id desc";
-	private final static String DATE = "createDate desc"; 
-	private final static String PRICE = "promotePrice";
-	
 	// 自动注入service层的实例对象，用于处理各种与数据库操作的请求
     @Autowired
     CategoryService categoryService;
@@ -62,7 +58,7 @@ public class ForeController {
     
     // 登陆请求
     @GetMapping("login")
-    public String login(HttpSession session) {
+    public String login(HttpSession session, Model model) {
     	if(session.getAttribute("user") != null)
     		return "redirect:/home";
     	return "fore/login";
@@ -81,6 +77,14 @@ public class ForeController {
             return "fore/login";
         }
         session.setAttribute("user", user);       // 将user存储在session中
+        
+        if(session.getAttribute("servletPath")!=null) {
+        	String servletPath = (String) session.getAttribute("servletPath");
+        	session.removeAttribute("servletPath");
+        	if(servletPath.equals("/"))
+        		return "redirect:/home";
+			return "redirect:/"+servletPath;                  
+        }
         return "redirect:/home";                  // 登陆成功，重定向到home页
     }
 
@@ -184,15 +188,15 @@ public class ForeController {
         if(null!=sort){
             switch(sort){
                 case "date" :
-                	sort = DATE;
+                	sort = ProductService.DATE;
                     break;
  
                 case "price":
-                	sort = PRICE;
+                	sort = ProductService.PRICE;
                     break;
  
                 case "all":
-                	sort = ALL;
+                	sort = ProductService.ALL;
                     break;
             }
             productService.fill(c, sort);
@@ -405,12 +409,14 @@ public class ForeController {
    
     // 我的订单页面
     @GetMapping("bought")
-    public String bought( Model model,HttpSession session) {
-        User user =(User)  session.getAttribute("user");
+    public String bought(Model model, HttpSession session) {
+//        User user = (User)  session.getAttribute("user");
+//        long total = orderService.getTotalByUser(user.getId(), OrderService.delete);
         // 过滤处于删除状态的订单
-        List<Order> os = orderService.list(user.getId(),OrderService.delete);   
-        orderItemService.fill(os);
-        model.addAttribute("os", os);
+//        List<Order> os = orderService.list(user.getId(), 24, 1, OrderService.delete);   
+//        orderItemService.fill(os);
+//        model.addAttribute("os", os);
+//        model.addAttribute("total", total);
         return "fore/bought";
     }
     

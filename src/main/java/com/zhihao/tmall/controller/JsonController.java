@@ -6,6 +6,8 @@ package com.zhihao.tmall.controller;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
+import com.zhihao.tmall.pojo.Order;
 import com.zhihao.tmall.pojo.Product;
+import com.zhihao.tmall.pojo.User;
 import com.zhihao.tmall.service.CategoryService;
+import com.zhihao.tmall.service.OrderItemService;
+import com.zhihao.tmall.service.OrderService;
 import com.zhihao.tmall.service.ProductService;
 
 /**
@@ -33,6 +39,12 @@ public class JsonController {
 	ProductService productService;
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	OrderItemService orderItemService;
+	
+	private final static int LIMIT = 1;
 	
 	/**
 	 * 在home页中通过下拉滚动条，动态加载数据
@@ -43,9 +55,27 @@ public class JsonController {
 	 */
 	@GetMapping("product/{cid}")
 	@ResponseBody
-	public List<Product> list(@PathVariable int cid) {
+	public List<Product> getProduct(@PathVariable int cid) {
 		List<Product> products = productService.list(cid);
 		return products;
+	}
+	
+	@GetMapping("bought/{status}/{count}")
+	@ResponseBody
+	public List<Order> getOrder(@PathVariable(value="status") String status, 
+			@PathVariable(value="count") int count, HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		List<Order> orders = orderService.list(user.getId(), count, LIMIT, status); 
+		orderItemService.fill(orders);
+		return orders;
+	}
+	
+	@GetMapping("bought/total/{status}")
+	@ResponseBody
+	public long getTotal(@PathVariable String status, HttpSession session) {
+		User user = (User)session.getAttribute("user");
+		long total = orderService.getTotalByUser(user.getId(), status);
+		return total;
 	}
 	
 	/**

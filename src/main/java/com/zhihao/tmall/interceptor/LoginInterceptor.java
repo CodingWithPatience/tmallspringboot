@@ -1,5 +1,6 @@
 package com.zhihao.tmall.interceptor;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     CategoryService categoryService;
     @Autowired
     OrderItemService orderItemService;
+    
      /**
      * 在业务处理器处理请求之前被调用
      * 如果返回false
@@ -32,9 +34,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
      *    接着再从最后一个拦截器往回执行所有的afterCompletion()
      */
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
+             HttpServletResponse response, Object handler) throws Exception {
 
         HttpSession session = request.getSession();
+        String servletPath = request.getServletPath();
         String contextPath = session.getServletContext().getContextPath();
         String[] noNeedAuthPage = new String[]{
                 "home",
@@ -47,6 +50,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 "category",
                 "search",
                 "searchtip",
+                "admin",
                 "error"};
 
         String uri = request.getRequestURI();
@@ -58,11 +62,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
         User user = (User) session.getAttribute("user");
 		if(null==user){
+			session.setAttribute("servletPath", servletPath);
 			response.sendRedirect(contextPath+"/login");
 			return false;
 		}
         return true;
-
     }
  
     /**

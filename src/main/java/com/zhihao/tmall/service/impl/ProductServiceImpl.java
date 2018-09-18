@@ -23,9 +23,6 @@ import com.zhihao.tmall.util.Page;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-	private static final String REVIEW = "review";
-	private static final String SALE = "saleCount";
-
 	@Autowired
     ProductMapper productMapper;
     @Autowired
@@ -124,9 +121,9 @@ public class ProductServiceImpl implements ProductService {
 	// 需用到连结查询，再对返回的结果进行排序
 	@Override
 	public List<Product> sortedlist(int cid, String sortCondition) {
-		if(sortCondition.equals(REVIEW) || sortCondition.equals(SALE)) {
+		if(sortCondition.equals(ProductService.REVIEW) || sortCondition.equals(ProductService.SALE)) {
 			List<Product> result = new ArrayList<>(); 
-			if(sortCondition.equals(REVIEW))
+			if(sortCondition.equals(ProductService.REVIEW))
 				result = productMapper.sortByReview(cid); 
 			else
 				result = productMapper.sortBySale(cid);

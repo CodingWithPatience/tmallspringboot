@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("")
 public class RedirectController {
 	
+	// 重定向到登录页
+	@GetMapping("")
+    public String redirectToLogin() {
+    	return "redirect:/login";
+    }
+	
 	// 返回注册页
     @RequestMapping("register")
     public String registerPage() {
@@ -23,12 +29,6 @@ public class RedirectController {
     @RequestMapping("registerSuccess")
     public String registerSuccessPage() {
         return "fore/registerSuccess";
-    }
-    
-    // 返回登录页
-    @RequestMapping("login")
-    public String loginPage() {
-        return "fore/login";
     }
     
     // 返回搜索结果页

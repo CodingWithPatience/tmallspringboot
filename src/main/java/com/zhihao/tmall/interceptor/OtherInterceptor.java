@@ -52,7 +52,7 @@ public class OtherInterceptor extends HandlerInterceptorAdapter {
         List<Category> cs = categoryService.list();
         request.getSession().setAttribute("cs", cs);
 
-        /*这里是获取当前的contextPath:tmall_ssm,用与放在左上角那个变形金刚，点击之后才能够跳转到首页，否则点击之后也仅仅停留在当前页面*/
+        /*这里是获取当前的contextPath:tmallspring,用与放在左上角那个变形金刚，点击之后才能够跳转到首页，否则点击之后也仅仅停留在当前页面*/
         HttpSession session = request.getSession();
         String contextPath = session.getServletContext().getContextPath();
         request.getSession().setAttribute("contextPath", contextPath);

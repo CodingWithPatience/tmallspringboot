@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zhihao.tmall.mapper.OrderMapper;
 import com.zhihao.tmall.pojo.Order;
 import com.zhihao.tmall.pojo.OrderExample;
+import com.zhihao.tmall.pojo.OrderExample.Criteria;
 import com.zhihao.tmall.pojo.OrderItem;
 import com.zhihao.tmall.pojo.Product;
 import com.zhihao.tmall.pojo.User;
@@ -37,6 +38,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
 	public long getTotal() {
 		return orderMapper.getTotal();
+	}
+    
+    @Override
+	public long getTotalByUser(int uid, String status) {
+    	if(OrderService.delete.equals(status))
+    		return orderMapper.getTotalByUserAll(uid, status);
+		return orderMapper.getTotalByUser(uid, status);
 	}
     
     @Override
@@ -107,10 +115,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> list(int uid, String excludedStatus) {
+    public List<Order> list(int uid, int count, int limit, String status) {
         OrderExample example =new OrderExample();
-        example.createCriteria().andUidEqualTo(uid).andStatusNotEqualTo(excludedStatus);
+        Criteria criteria = example.createCriteria().andUidEqualTo(uid);
+        if(OrderService.delete.equals(status))
+        	criteria.andStatusNotEqualTo(status);
+        else
+        	criteria.andStatusEqualTo(status);
+        
         example.setOrderByClause("id desc");
+        example.setOffset(count);
+        example.setLimit(limit);
         return orderMapper.selectByExample(example);
     }
     

@@ -8,6 +8,14 @@ import com.zhihao.tmall.pojo.Product;
 import com.zhihao.tmall.util.Page;
 
 public interface ProductService {
+	
+	// 产品排序方式
+	String ALL = "id desc";
+	String DATE = "createDate desc"; 
+	String PRICE = "promotePrice";
+	String REVIEW = "review";
+	String SALE = "saleCount";
+	
     long getTotal(int cid);
     void add(Product p);
     void delete(int id);

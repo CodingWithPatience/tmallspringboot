@@ -17,6 +17,7 @@ public interface OrderService {
     String delete = "delete";
 
     long getTotal();
+    long getTotalByUser(int uid, String status);
     void add(Order o);
     float add(Order o,List<OrderItem> ois);
     void delete(int id);
@@ -24,7 +25,7 @@ public interface OrderService {
     Order get(int id);
     List<Order> list();
     List<Order> list(Page page);
-    List<Order> list(int uid, String excludedStatus);
+    List<Order> list(int uid, int count, int limit, String status);
 	Order create(Order order, User user);
 	Order finish(Order order, List<OrderItem> orderItems);
 }
