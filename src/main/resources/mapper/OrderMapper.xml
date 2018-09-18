@@ -76,6 +76,12 @@
   <select id="getTotal" resultType="long">
     select count(*) from order_
   </select>
+  <select id="getTotalByUser" resultType="long">
+    select count(*) from order_ where uid = ${uid} and status = "${status}"
+  </select>
+  <select id="getTotalByUserAll" resultType="long">
+    select count(*) from order_ where uid = ${uid} and status != "${status}"
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from order_
     where id = #{id,jdbcType=INTEGER}
