@@ -1,10 +1,13 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyValueExample {
-    protected String orderByClause;
+public class PropertyValueExample implements Serializable {
+	private static final long serialVersionUID = 3216953338114549331L;
+
+	protected String orderByClause;
 
     protected boolean distinct;
 

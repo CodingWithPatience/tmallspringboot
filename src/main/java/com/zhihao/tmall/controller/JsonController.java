@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
-import com.zhihao.tmall.pojo.Order;
 import com.zhihao.tmall.pojo.Product;
 import com.zhihao.tmall.pojo.User;
 import com.zhihao.tmall.service.CategoryService;
@@ -44,7 +43,7 @@ public class JsonController {
 	@Autowired
 	OrderItemService orderItemService;
 	
-	private final static int LIMIT = 1;
+//	private final static int LIMIT = 1;
 	
 	/**
 	 * 在home页中通过下拉滚动条，动态加载数据
@@ -59,16 +58,16 @@ public class JsonController {
 		List<Product> products = productService.list(cid);
 		return products;
 	}
-	
-	@GetMapping("bought/{status}/{count}")
-	@ResponseBody
-	public List<Order> getOrder(@PathVariable(value="status") String status, 
-			@PathVariable(value="count") int count, HttpSession session) {
-		User user = (User)session.getAttribute("user");
-		List<Order> orders = orderService.list(user.getId(), count, LIMIT, status); 
-		orderItemService.fill(orders);
-		return orders;
-	}
+//	
+//	@GetMapping("bought/{status}/{count}")
+//	@ResponseBody
+//	public List<Order> getOrder(@PathVariable(value="status") String status, 
+//			@PathVariable(value="count") int count, HttpSession session) {
+//		User user = (User)session.getAttribute("user");
+//		List<Order> orders = orderService.list(user.getId(), count, LIMIT, status); 
+//		orderItemService.fill(orders);
+//		return orders;
+//	}
 	
 	@GetMapping("bought/total/{status}")
 	@ResponseBody

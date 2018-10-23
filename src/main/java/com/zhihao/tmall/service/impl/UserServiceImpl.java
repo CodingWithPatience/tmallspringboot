@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public boolean isExist(String name) {
+    public boolean isUsernameExist(String name) {
         UserExample example = new UserExample();
         example.createCriteria().andNameEqualTo(name);
         List<User> result= userMapper.selectByExample(example);
@@ -68,12 +68,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isMailExist(String account) {
+        UserExample example = new UserExample();
+        example.createCriteria().andMailAccountEqualTo(account);
+        List<User> result= userMapper.selectByExample(example);
+        if(!result.isEmpty())
+            return true;
+        return false;
+    }
+
+    @Override
     public User get(String name, String password) {
-    	UserExample example =new UserExample();
+    	UserExample example = new UserExample();
         example.createCriteria().andNameEqualTo(name).andPasswordEqualTo(password);
         List<User> result= userMapper.selectByExample(example);
         if(result.isEmpty())
             return null;
         return result.get(0);
     }
+
+	@Override
+	public User getByCode(String code) {
+		UserExample example = new UserExample();
+		example.createCriteria().andCodeEqualTo(code);
+		List<User> result= userMapper.selectByExample(example);
+		if(result.isEmpty())
+	        return null;
+	    return result.get(0);
+	}
 }

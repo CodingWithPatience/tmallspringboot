@@ -19,6 +19,15 @@
 					return false;
 				return true;
 			});
+			
+			// 删除分类
+			$("span#categoryDelete").click(function(){
+				var url = $(this).attr("link");
+				deleteFun(url);
+			});
+			
+			var urls = new Array();
+			setPageUrl(urls);
     });
 	</script>
 	<div class="workingArea">
@@ -41,10 +50,10 @@
 						<td scope="row" th:inline="text">[[${c.id}]]</td>
 						<td><img height="40px" th:attr="src=@{'/img/category/'+${c.id}+'.jpg'}"></td>
 						<td th:inline="text">[[${c.name}]]</td>
-						<td><a th:href="@{'/admin/property/list/'+${c.id}}"><span class="fa fa-list" aria-hidden="true"></span></a></td>
-						<td><a th:href="@{'/admin/product/list/'+${c.id}}"><span class="fa fa-shopping-cart" aria-hidden="true"></span></a></td>
-						<td><a th:href="@{'/admin/category/edit/'+${c.id}}"><span class="fa fa-edit" aria-hidden="true"></span></a></td>
-						<td><a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/category/delete/'+${c.id}}"><span class="fa fa-trash-o" aria-hidden="true"></span></a></td>
+						<td><a th:href="@{'/admin/category/'+${c.id}+'/property'}"><span class="fa fa-list" aria-hidden="true"></span></a></td>
+						<td><a th:href="@{'/admin/category/'+${c.id}+'/product'}"><span class="fa fa-shopping-cart" aria-hidden="true"></span></a></td>
+						<td><a th:href="@{'/admin/category/'+${c.id}}"><span class="fa fa-edit" aria-hidden="true"></span></a></td>
+						<td><span id="categoryDelete" th:attr="link=@{'/admin/category/'+${c.id}}" class="fa fa-trash-o" aria-hidden="true"></span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -55,7 +64,7 @@
     <div class="card border-dark mb-3 addDiv" >
 			<div class="card-header">新增分类</div>
 			<div class="card-body text-dark">
-				<form method="post" id="addForm" th:attr="action=@{/admin/category/add}" enctype="multipart/form-data">
+				<form method="post" id="addForm" th:attr="action=@{/admin/category}" enctype="multipart/form-data">
 					<table class="addTable">
 						<tr>
 							<td>分类名称</td>

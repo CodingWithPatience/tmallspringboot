@@ -1,12 +1,15 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import com.zhihao.tmall.service.OrderService;
 
-public class Order {
-    private Integer id;
+public class Order implements Serializable {
+	private static final long serialVersionUID = -3885702442970327487L;
+
+	private Integer id;
 
     private String orderCode;
 

@@ -5,9 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zhihao.tmall.constant.PageParam;
 import com.zhihao.tmall.pojo.Category;
 import com.zhihao.tmall.pojo.Property;
 import com.zhihao.tmall.service.CategoryService;
@@ -20,7 +26,7 @@ import com.zhihao.tmall.util.Page;
  * 2018年8月26日
  */
 @Controller
-@RequestMapping("admin/property")
+@RequestMapping("admin/category")
 public class PropertyController {
 	@Autowired
 	CategoryService categoryService;
@@ -28,53 +34,51 @@ public class PropertyController {
 	PropertyService propertyService;
 
 	// 添加分类属性
-	@RequestMapping("add")
-	public String add(Model model, Property p) {
+	@PostMapping("/{cid}/property")
+	public String add(Model model, Property p, @PathVariable int cid)  {
 		propertyService.add(p);
-		return "redirect:/admin/property/list/"+p.getCid();
+		return "redirect:/admin/category/"+cid+"/property";
 	}
 
 	// 删除分类属性
-	@RequestMapping("delete/{id}")
-	public String delete(@PathVariable int id) {
-		Property p = propertyService.get(id);
+	@DeleteMapping("/{cid}/property/{id}")
+	public String delete(@PathVariable(value="id") int id, @PathVariable(value="cid") int cid) {
 		propertyService.delete(id);
-		return "redirect:/admin/property/list/"+p.getCid();
+		return "redirect:/admin/category/"+cid+"/property";
 	}
 
 	// 编辑分类属性
-	@RequestMapping("edit/{id}")
-	public String edit(Model model, @PathVariable int id) {
+	@GetMapping("/{cid}/property/{id}")
+	public String edit(Model model, @PathVariable int id, @PathVariable(value="cid") int cid) {
 		Property p = propertyService.get(id);
-		Category c = categoryService.get(p.getCid());
+		Category c = categoryService.get(cid);
 		p.setCategory(c);
 		model.addAttribute("p", p);
 		return "admin/editProperty";
 	}
 
 	// 更新分类属性
-	@RequestMapping("update")
-	public String update(Property p) {
+	@PutMapping("/{cid}/property/{id}")
+	public String update(Property p, @PathVariable(value="cid") int cid) {
 		propertyService.update(p);
-		return "redirect:/admin/property/list/"+p.getCid();
+		return "redirect:/admin/category/"+cid+"/property";
 	}
 
 	// 显示分类属性
-	@RequestMapping(value= {"list/{cid}", "list/{cid}/{pageNum}"})
-	public String list(@PathVariable(value="cid") int cid, Model model, Page page,
-			@PathVariable(required=false, value="pageNum") String pageNum) {
-		page.setCurrentPage(pageNum);								
-		page.setParam("property");
-		page.setId(String.valueOf(cid));
+	@GetMapping(value= {"/{cid}/property"})
+	public String list(@PathVariable(value="cid") int cid, Model model, Page propertyPage,
+			@RequestParam(required=false) Integer page) {
+		propertyPage.setCurrentPage(page);								
+		propertyPage.setParam(PageParam.PROPERTY);
 		
 		Category c = categoryService.get(cid);
-		List<Property> ps = propertyService.list(cid, page);
+		List<Property> ps = propertyService.list(cid, propertyPage);
 		long total = propertyService.getTotal(cid);
-		page.setTotal(total);
+		propertyPage.setTotal(total);
 
 		model.addAttribute("ps", ps);
 		model.addAttribute("c", c);
-		model.addAttribute("page", page);
+		model.addAttribute("page", propertyPage);
 		return "admin/listProperty";
 	}
 }

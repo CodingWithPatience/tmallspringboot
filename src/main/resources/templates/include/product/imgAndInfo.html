@@ -35,7 +35,7 @@
 		
 		// 添加到购物车·
 		$(".addCartLink").click(function(){
-			var page = getProjectPath()+"checkLogin";
+			var page = getRootPath()+"checkLogin";
 			// 检查是否已登陆，若未，弹出模态登陆窗口，若已登陆，以Ajax方式向后台传递数据
 			$.get(
 				page,
@@ -43,7 +43,7 @@
 					if("success"==result){
 						var pid = [[${p.id}]];
 						var num= $(".productNumberSetting").val();
-						var addCartpage = getProjectPath()+"addCart"; // getProjectPath()获取项目根路径
+						var addCartpage = getRootPath()+"addCart"; // getRootPath()获取项目根路径
 						$.get(                                        // 在header.html中定义
 							addCartpage,
 							{"pid":pid,"num":num},
@@ -70,7 +70,7 @@
 		});
 		// 检查是否已登陆，若已登陆，向购买链接中添加一项购买数量的路径参数
 		$(".buyLink").click(function(){
-			var page = getProjectPath()+"checkLogin";
+			var page = getRootPath()+"checkLogin";
 			$.get(
 				page,
 				function(result){
@@ -95,7 +95,7 @@
 				return false;
 			}
 			
-			var page = getProjectPath()+"loginAjax";
+			var page = getRootPath()+"loginAjax";
 			$.get(
 				page,
 				{"name":name,"password":password},

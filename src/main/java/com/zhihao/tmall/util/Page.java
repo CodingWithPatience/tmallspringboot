@@ -18,11 +18,24 @@ public class Page {
     private long nextPage; //下一页
     private long previousPage; //上一页
     private String id;
-    private String param; //参数
+    private String param; //参数，用于显示页面的类型
 
     private List<Page> pages = new ArrayList<>();
 
     private static final int defaultCount = 5; //默认每页显示5条
+    
+    public Page (){
+        this.count = defaultCount;
+        this.curPage = 1;
+        this.pNum = 1;
+        this.nextPage = 2;
+        this.previousPage = 1;
+    }
+    public Page(int start, int count) {
+        super();
+        this.start = start;
+        this.count = count;
+    }
 
     public String getId() {
 		return id;
@@ -43,62 +56,7 @@ public class Page {
         this.count = count;
     }
 
-    public Page (){
-        this.count = defaultCount;
-        this.curPage = 1;
-        this.pNum = 1;
-        this.nextPage = 2;
-        this.previousPage = 1;
-    }
-    public Page(int start, int count) {
-        super();
-        this.start = start;
-        this.count = count;
-    }
-
-    public boolean isHasPrevious(){
-        if(start==0)
-            return false;
-        return true;
-    }
-    public boolean isHasNext(){
-        if(start==getLast())
-            return false;
-        return true;
-    }
-
-    public long getTotalPage(){
-        long totalPage;
-        // 假设总数是50，是能够被5整除的，那么就有10页
-        if (0 == total % count)
-            totalPage = total /count;
-		// 假设总数是51，不能够被5整除的，那么就有11页
-        else
-            totalPage = total / count + 1;
-
-        if(0==totalPage)
-            totalPage = 1;
-        return totalPage;
-    }
-
-    public long getLast(){
-        long last;
-        // 假设总数是50，是能够被5整除的，那么最后一页的开始就是45
-        if (0 == total % count)
-            last = total - count;
-		// 假设总数是51，不能够被5整除的，那么最后一页的开始就是50
-        else
-            last = total - total % count;
-        last = last<0?0:last;
-        return last;
-    }
-
-    @Override
-    public String toString() {
-        return "Page [start=" + start + ", count=" + count + ", total=" + total + ", getStart()=" + getStart()
-                + ", getCount()=" + getCount() + ", isHasPreviouse()=" + isHasPrevious() + ", isHasNext()="
-                + isHasNext() + ", getTotalPage()=" + getTotalPage() + ", getLast()=" + getLast() + ", getCurPage()=" + getCurPage()+"]";
-    }
+   
     public long getTotal() {
         return total;
     }
@@ -113,7 +71,7 @@ public class Page {
     public void setParam(String param) {
         this.param = param;
     }
-    public int getFirstPage() {
+	public int getFirstPage() {
     	start = 0;
     	curPage = 1;
     	return 1;
@@ -138,13 +96,11 @@ public class Page {
     public long getPageNum() {
     	return pNum++;
     }
-    public void setCurrentPage(String pageNum) {
-    	if(pageNum!=null&&pageNum.startsWith("page")) {
-    		String n = pageNum.substring(4,pageNum.length());
-    		int num = Integer.parseInt(n);
-    		this.start = (num-1) * defaultCount;
+    public void setCurrentPage(Integer pageNum) {
+    	if(pageNum!=null&&!(pageNum<=0)) {
+    		this.start = (pageNum-1) * getCount();
     		this.start = this.start < 0 ? 0 : this.start;
-    		this.curPage = num;
+    		this.curPage = pageNum;
     		setPreviousPage(curPage-1);
     		if(curPage >= 10)
     			pNum = curPage - offset;  
@@ -162,4 +118,48 @@ public class Page {
     	}
     	return pages;
     }
+	
+	public boolean isHasPrevious(){
+	if(start==0)
+			return false;
+		return true;
+	}
+	public boolean isHasNext(){
+		if(start==getLast())
+			return false;
+		return true;
+	}
+
+	public long getTotalPage(){
+		long totalPage;
+		// 假设总数是50，是能够被5整除的，那么就有10页
+		if (0 == total % count)
+			totalPage = total /count;
+		// 假设总数是51，不能够被5整除的，那么就有11页
+		else
+			totalPage = total / count + 1;
+
+		if(0==totalPage)
+			totalPage = 1;
+		return totalPage;
+	}
+
+	public long getLast(){
+		long last;
+		// 假设总数是50，是能够被5整除的，那么最后一页的开始就是45
+		if (0 == total % count)
+			last = total - count;
+		// 假设总数是51，不能够被5整除的，那么最后一页的开始就是50
+		else
+			last = total - total % count;
+		last = last<0?0:last;
+		return last;
+	}
+
+	@Override
+	public String toString() {
+		return "Page [start=" + start + ", count=" + count + ", pNum=" + pNum + ", offset=" + offset + ", total="
+				+ total + ", totalPage=" + totalPage + ", curPage=" + curPage + ", nextPage=" + nextPage
+				+ ", previousPage=" + previousPage + ", id=" + id + ", param=" + param + ", pages=" + pages + "]";
+	}
 }

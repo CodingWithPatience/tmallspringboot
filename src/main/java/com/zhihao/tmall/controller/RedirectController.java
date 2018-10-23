@@ -20,13 +20,19 @@ public class RedirectController {
     }
 	
 	// 返回注册页
-    @RequestMapping("register")
+    @GetMapping("register")
     public String registerPage() {
         return "fore/register";
     }
     
+    // 提示到邮箱去激活的页面
+    @GetMapping("register/mailauth")
+	public String mailAuth() {
+		return "fore/mailRegister";
+	}
+    
     // 返回注册成功的页面
-    @RequestMapping("registerSuccess")
+    @GetMapping("registerSuccess")
     public String registerSuccessPage() {
         return "fore/registerSuccess";
     }

@@ -77,16 +77,19 @@
 			
 		});
 		
-		// 获取当前url host及项目名称部分的路径
-		function getProjectPath(){
-			var curPath = document.location.href;
+		// 获取当前url的protocol、host部分
+		function getRootPath(){
+ 			/* var curPath = document.location.href;
 			var pathName = document.location.pathname;
 			var index = pathName.substr(1).indexOf("/");
 		  var projectPart = pathName.substr(0,index+2);
 		  var pos = curPath.indexOf(pathName);
 		  var hostPart = curPath.substring(0,pos);
-		  var projectPath = hostPart + projectPart;
-		  return projectPath;
+		  var projectPath = hostPart + projectPart; */
+		  var protocol = window.location.protocol;
+		  var host = window.location.host;
+		  var root = protocol+"//"+host+"/";
+		  return root;
 		}
 		
 		// 格式化金额，保留两位小数

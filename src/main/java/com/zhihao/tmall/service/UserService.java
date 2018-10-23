@@ -6,6 +6,9 @@ import com.zhihao.tmall.pojo.User;
 import com.zhihao.tmall.util.Page;
 
 public interface UserService {
+	int INACTIVE = 0;
+	int ACTIVE = 1;
+	
     long getTotal();
     void add(User c);
     void delete(int id);
@@ -13,6 +16,8 @@ public interface UserService {
     User get(int id);
     List<User> list();
     List<User> list(Page pgae);
-    boolean isExist(String name);
+    boolean isUsernameExist(String name);
+    boolean isMailExist(String account);
     User get(String name, String password);
+	User getByCode(String code);
 }

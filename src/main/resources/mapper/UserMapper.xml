@@ -70,8 +70,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zhihao.tmall.pojo.User" useGeneratedKeys="true">
-    insert into user (name, password)
-    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+    insert into user (name, password, mailaccount, code, status)
+    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+     #{mailAccount,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zhihao.tmall.pojo.User" useGeneratedKeys="true">
     insert into user
@@ -82,6 +83,15 @@
       <if test="password != null">
         password,
       </if>
+      <if test="mailAccount != null">
+        mailaccount,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="status != 0">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -89,6 +99,15 @@
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="mailAccount != null">
+        #{mailAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="status != 0">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -101,6 +120,13 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
+      <if test="code != null">
+        mailaccount = #{mailAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="status != 0">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+        code = #{code,jdbcType=VARCHAR},
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -108,6 +134,9 @@
     update user
     set name = #{name,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR}
+      mailaccount = #{mailAccount,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

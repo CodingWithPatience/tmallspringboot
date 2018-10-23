@@ -57,7 +57,7 @@
 				// 解绑scroll事件
 				$(window).unbind("scroll");
 				var img = document.createElement("img");
-				img.setAttribute("src",getProjectPath()+"img/site/end.png");
+				img.setAttribute("src",getRootPath()+"img/site/end.png");
 				img.className = "endpng";
 				img.idName = "endpng";
 				$("div.homePageCategoryProducts").append(img);
@@ -92,7 +92,7 @@
 		// 创建包含产品信息的div
 		function createProductDiv(data) {
 			var div = document.createElement("div");
-			var projectPath = getProjectPath();
+			var projectPath = getRootPath();
 			for(var i=0; i<5; i++){
 				var pName = data[i].name;
 				var pPromotePrice = data[i].promotePrice;

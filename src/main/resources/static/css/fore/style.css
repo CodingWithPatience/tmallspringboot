@@ -116,7 +116,7 @@ div.categoryWithCarousel div.headbar {
 div.carousel-of-product {
 	width: 1024px;
 	height: 510px;
-	margin:0px auto;
+	margin: 0px auto;
 }
 div.carousel-inner div.item img{
 /* 	width:100%; */
@@ -329,7 +329,7 @@ div.productItem  img:hover {
 img.endpng {
 	display: block;
 	width: 82px;
-	margin: 0 auto;
+	margin: 0px auto;
 }
 
 div.footer {
@@ -1742,10 +1742,8 @@ button.orderListItemConfirm {
 	background-color: #66B6FF;
 	border-radius: 2px;
 	color: white;
-	font-size: 12px;
-	font-weight: bold;
 	border-width: 0px;
-	padding: 6px 12px;
+	padding: 6px 8px;
 }
 
 button.orderListItemConfirm:hover {
@@ -1756,10 +1754,8 @@ button.ask2delivery {
 	background-color: #33b5e5;
 	border-radius: 2px;
 	color: white;
-	font-size: 10px;
-	font-weight: bold;
 	border-width: 0px;
-	padding: 6px 6px;
+	padding: 6px 8px;
 } 
 
 button.ask2delivery:hover {

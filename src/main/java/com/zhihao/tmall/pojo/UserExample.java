@@ -1,9 +1,12 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserExample {
+public class UserExample implements Serializable {
+	private static final long serialVersionUID = -7269988868760421296L;
+
 	// 非逆向工程生成字段，设置从那一条数据开始查找，跳过前面offse条数据
 	protected long offset = -1;
 
@@ -325,6 +328,26 @@ public class UserExample {
             addCriterion("password not between", value1, value2, "password");
             return (Criteria) this;
         }
+        
+        public Criteria andCodeIsNull() {
+            addCriterion("code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCodeIsNotNull() {
+            addCriterion("code is not null");
+            return (Criteria) this;
+        }
+        
+        public Criteria andCodeEqualTo(String value) {
+        	addCriterion("code =", value, "code");
+            return (Criteria) this;
+		}
+        
+        public Criteria andMailAccountEqualTo(String value) {
+        	addCriterion("mailaccount =", value, "mailaccount");
+            return (Criteria) this;
+		}
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -332,6 +355,7 @@ public class UserExample {
         protected Criteria() {
             super();
         }
+
     }
 
     public static class Criterion {

@@ -1,8 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div class="productDetailDiv" th:fragment="productDetail">
 	<div class="productDetailTopPart">
-		<a href="#nowhere" class="productDetailTopPartSelectedLink selected">商品详情</a>
-		<a href="#nowhere" class="productDetailTopReviewLink">累计评价 <span class="productDetailTopReviewLinkNumber" th:text="${p.reviewCount}"></span> </a>
+		<a href="#" class="productDetailTopPartSelectedLink selected">商品详情</a>
+		<a href="#" class="productDetailTopReviewLink">累计评价 <span class="productDetailTopReviewLinkNumber" th:text="${p.reviewCount}"></span> </a>
 	</div>
 	<div class="productParamterPart">
 		<div class="productParamter">产品参数：</div>
@@ -33,7 +33,7 @@
 					var productImage = productIamges[i];
 					
 					var img = document.createElement("img");
-					img.setAttribute("src", getProjectPath()+"img/productDetail/"+productImage.id+".jpg");
+					img.setAttribute("src", getRootPath()+"img/productDetail/"+productImage.id+".jpg");
 					
 					var div = document.createElement("div");
 					div.className = "productDetailImagesPart";

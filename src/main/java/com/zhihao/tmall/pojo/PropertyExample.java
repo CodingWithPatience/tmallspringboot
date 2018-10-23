@@ -1,9 +1,12 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertyExample {
+public class PropertyExample implements Serializable {
+	private static final long serialVersionUID = -6748714497605670784L;
+
 	// 非逆向工程生成字段，设置从那一条数据开始查找，跳过前面offse条数据
 	protected long offset = -1;
 	

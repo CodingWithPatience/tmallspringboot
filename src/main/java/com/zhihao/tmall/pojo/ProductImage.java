@@ -1,7 +1,11 @@
 package com.zhihao.tmall.pojo;
 
-public class ProductImage {
-    private Integer id;
+import java.io.Serializable;
+
+public class ProductImage implements Serializable {
+	private static final long serialVersionUID = -3437787361693913137L;
+
+	private Integer id;
 
     private Integer pid;
 

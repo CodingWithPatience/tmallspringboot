@@ -1,9 +1,12 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Review {
-    private Integer id;
+public class Review implements Serializable {
+	private static final long serialVersionUID = 7479648483211169933L;
+
+	private Integer id;
 
     private String content;
 

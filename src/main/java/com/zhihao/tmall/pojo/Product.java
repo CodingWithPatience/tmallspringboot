@@ -1,10 +1,13 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Product {
-    private Integer id;
+public class Product implements Serializable {
+	private static final long serialVersionUID = -8448935688150028923L;
+
+	private Integer id;
 
     private String name;
 

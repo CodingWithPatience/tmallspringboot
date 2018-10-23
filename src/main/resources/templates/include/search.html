@@ -99,7 +99,7 @@
 		
 		// keyup事件与focus事件触发时，向后台获取数据，并在搜索框下显示
 		$(function(){
-			var url = getProjectPath()+"jsondata/searchtip";
+			var url = getRootPath()+"jsondata/searchtip";
 			console.log(url);
 			$("#keyword").keyup(function(){
 				var keyword = $(this).val();

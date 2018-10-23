@@ -17,13 +17,26 @@
 					return true;
 				return false;
 			});
+			
+			//删除属性
+			$("span#properyDelete").click(function(){
+				var url = $(this).attr("link");
+				deleteFun(url);
+			});
+			
+			//分类id
+			var cid = [[${c.id}]];
+      //拼接url的字符串数组
+ 			var urls = new Array("category",cid);
+	    //为分页按钮a元素设置对应的href属性值
+      setPageUrl(urls);
 		});
 	</script>
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/admin/property/list/'+${c.id}}">[[${c.name}]]</a></li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/category/'+${c.id}+'/property'}">[[${c.name}]]</a></li>
 			<li class="breadcrumb-item active">属性管理</li>
 		</ol>
 		<div class="listDataTableDiv">
@@ -40,11 +53,13 @@
 					<tr th:each="p : ${ps}">
 						<td th:inline="text">[[${p.id}]]</td>
 						<td th:inline="text">[[${p.name}]]</td>
-						<td><a th:href="@{'/admin/property/edit/'+${p.id}}">
-							<span class="fa fa-edit" aria-hidden="true"></span></a>
+						<td>
+							<a th:href="@{'/admin/category/'+${c.id}+'/property/'+${p.id}}">
+								<span class="fa fa-edit" aria-hidden="true"></span>
+							</a>
 						</td>
-						<td><a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/property/delete/'+${p.id}}">
-							<span class="fa fa-trash-o" aria-hidden="true"></span></a>
+						<td>
+							<span id="properyDelete" th:attr="link=@{'/admin/category/'+${c.id}+'/property/'+${p.id}}" class="fa fa-trash-o" aria-hidden="true"></span>
 						</td>
 					</tr>
 				</tbody>
@@ -56,7 +71,7 @@
 		<div class="card border-dark mb-3 addDiv">
 			<div class="card-header">新增属性</div>
 			<div class="card-body text-dark">
-				<form method="post" id="addForm" th:attr="action=@{/admin/property/add}">
+				<form method="post" id="addForm" th:attr="action=@{'/admin/category/'+${c.id}+'/property'}">
 					<table class="addTable">
 						<tr>
 							<td>属性名称</td>

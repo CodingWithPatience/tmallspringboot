@@ -1,11 +1,15 @@
 package com.zhihao.tmall.pojo;
 
-public class User {
-    private Integer id;
+import java.io.Serializable;
 
+public class User implements Serializable {
+	private static final long serialVersionUID = 1108705528719818579L;
+	private Integer id;
+    private Integer status;
     private String name;
-
     private String password;
+    private String mailAccount;
+    private String code;
 
     public Integer getId() {
         return id;
@@ -15,7 +19,15 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
+    public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getName() {
         return name;
     }
 
@@ -31,7 +43,23 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
     
-    public String getAnonymousName(){
+    public String getMailAccount() {
+		return mailAccount;
+	}
+
+	public void setMailAccount(String mailAccount) {
+		this.mailAccount = mailAccount;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getAnonymousName(){
         if(null==name)
             return null;
  

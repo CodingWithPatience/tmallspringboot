@@ -12,26 +12,39 @@
 
 	<script>
     $(function() {
-        $("#addForm").submit(function() {
-            if (!checkEmpty("name", "产品名称"))
-                return false;
-						if (!checkEmpty("subTitle", "小标题"))
-								return false;
-            if (!checkNumber("originalPrice", "原价格"))
-                return false;
-            if (!checkNumber("promotePrice", "优惠价格"))
-                return false;
-            if (!checkInt("stock", "库存"))
-                return false;
-            return true;
-        });
+			$("#addForm").submit(function() {
+				if (!checkEmpty("name", "产品名称"))
+						return false;
+				if (!checkEmpty("subTitle", "小标题"))
+						return false;
+				if (!checkNumber("originalPrice", "原价格"))
+						return false;
+				if (!checkNumber("promotePrice", "优惠价格"))
+						return false;
+				if (!checkInt("stock", "库存"))
+						return false;
+				return true;
+			});
+        
+      //删除产品
+			$("span#productDelete").click(function(){
+				var url = $(this).attr("link");
+				deleteFun(url);
+			});
+      
+      //分类id
+			var cid = [[${c.id}]];
+      //拼接url的字符串数组
+	    var urls = new Array("category",cid);
+	    //为分页按钮a元素设置对应的href属性值
+      setPageUrl(urls);
     });
 </script>
 
 <div class="workingArea">
 	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
-		<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'+${c.id}}" th:inline="text">[[${c.name}]]</a></li>
+		<li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
+		<li class="breadcrumb-item"><a th:href="@{'/admin/category/'+${c.id}+'/product'}" th:inline="text">[[${c.name}]]</a></li>
 		<li class="breadcrumb-item active">产品管理</li>
 	</ol>
 	<div class="listDataTableDiv">
@@ -62,15 +75,26 @@
 					<td th:inline="text">[[${p.originalPrice}]]</td>
 					<td th:inline="text">[[${p.promotePrice}]]</td>
 					<td th:inline="text">[[${p.stock}]]</td>
-					<td><a th:href="@{'/admin/productImage/list/'+${p.id}}"><span
-							class="fa fa-picture-o" aria-hidden="true"></span></a></td>
-					<td><a th:href="@{'/admin/propertyValue/edit/'+${p.id}}"><span
-							class="fa fa-list" aria-hidden="true"></span></a></td>
-					<td><a th:href="@{'/admin/product/edit/'+${p.id}}"><span
-							class="fa fa-edit" aria-hidden="true"></span></a></td>
-					<td><a th:attr="deleteLink=@{'true'}"
-						   th:href="@{'/admin/product/delete/'+${p.id}}"><span
-							class="fa fa-trash-o" aria-hidden="true"></span></a></td>
+					<td>
+						<a th:href="@{'/admin/product/'+${p.id}+'/image'}">
+							<span class="fa fa-picture-o" aria-hidden="true"></span>
+						</a>
+					</td>
+					<td>
+						<a th:href="@{'/admin/product/'+${p.id}+'/propertyValue'}">
+							<span class="fa fa-list" aria-hidden="true"></span>
+						</a>
+					</td>
+					<td>
+						<a th:href="@{'/admin/category/'+${c.id}+'/product/'+${p.id}}">
+							<span class="fa fa-edit" aria-hidden="true"></span>
+						</a>
+					</td>
+					<td>
+						<span id="productDelete" th:attr="link=@{'/admin/category/'+${c.id}+'/product/'+${p.id}}"
+							class="fa fa-trash-o" aria-hidden="true">
+						</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -83,7 +107,7 @@
 	<div class="card card-default addDiv">
 		<div class="card-header">新增产品</div>
 		<div class="card-body">
-			<form method="post" id="addForm" th:attr="action=@{/admin/product/add}">
+			<form method="post" id="addForm" th:attr="action=@{/admin/category/${c.id}/product}">
 				<table class="addTable">
 					<tr>
 						<td>产品名称</td>

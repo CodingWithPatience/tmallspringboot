@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.zhihao.tmall.constant.PageParam;
 import com.zhihao.tmall.pojo.User;
 import com.zhihao.tmall.service.UserService;
 import com.zhihao.tmall.util.Page;
@@ -25,17 +26,17 @@ public class UserController {
     UserService userService;
  
     // 分页方式显示用户
-    @GetMapping(value= {"list", "list/{pageNum}"})
+    @GetMapping(value= {""})
     public String list(Model model, 
-    		@PathVariable(required=false) String pageNum, Page page){
-    	page.setCurrentPage(pageNum);
-    	page.setParam("user");
-        List<User> us = userService.list(page);
+    		@RequestParam(required=false) Integer page, Page userPage){
+    	userPage.setCurrentPage(page);
+    	userPage.setParam(PageParam.USER);
+        List<User> us = userService.list(userPage);
         long total = userService.getTotal();
-        page.setTotal(total);
+        userPage.setTotal(total);
 
         model.addAttribute("us", us);
-        model.addAttribute("page", page);
+        model.addAttribute("page", userPage);
         return "admin/listUser";
     }
 }

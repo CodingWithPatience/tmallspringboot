@@ -1,9 +1,12 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Category {
-    private Integer id;
+public class Category implements Serializable {
+	private static final long serialVersionUID = -8477395598880983000L;
+
+	private Integer id;
 
     private String name;
     

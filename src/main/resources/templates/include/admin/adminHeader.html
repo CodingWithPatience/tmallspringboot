@@ -13,6 +13,7 @@
 	  href="https://cdnjs.cloudflare.com/ajax/libs/typicons/2.0.7/typicons.min.css" />
 				
 	<script th:inline="javascript">
+		// 检查是否输入为空	
 		function checkEmpty(id, name){
 			var value = $("#"+id).val();
 			if(value.length==0){
@@ -22,8 +23,8 @@
 			}
 			return true;
 		}
-		function checkNumber(id, name){
-			var value = $("#"+id).val();
+		// 检查输入的是否为数字
+		function checkNumber(id, name){ var value = $("#"+id).val();
 			if(value.length==0){
 				alert(name+ "不能为空");
 				$("#"+id)[0].focus();
@@ -37,6 +38,7 @@
 			
 			return true;
 		}
+		// 检查输入是否为整数
 		function checkInt(id, name){
 			var value = $("#"+id).val();
 			if(value.length==0){
@@ -49,21 +51,26 @@
 				$("#"+id)[0].focus();
 				return false;
 			}
-			
 			return true;
 		}
-		$(function(){
-			$("a").click(function(){
-				var deleteLink = $(this).attr("deleteLink");
-				if("true"==deleteLink){
-					var confirmDelete = confirm("确认要删除");
-					if(confirmDelete)
-						return true;
-					return false;
-				}
-			});
-		})
-		function getProjectPath(){
+		// 删除函数
+		function deleteFun(url) {
+			var confirmDelete = confirm("确认要删除");
+			if(confirmDelete) {
+				$.ajax({
+					url : url,
+					type : 'delete',
+					success : function(result) {
+						if(result && result == "success")
+							window.location.reload();
+						else
+							alter("删除失败！");
+					}
+				});
+			}
+		}
+		// 获取url路径项目部分	
+		function getRootPath(){
 			var curPath = document.location.href;
 			var pathName = document.location.pathname;
 			var index = pathName.substr(1).indexOf("/");

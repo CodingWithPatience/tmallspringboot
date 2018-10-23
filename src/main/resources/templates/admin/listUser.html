@@ -9,6 +9,14 @@
 <body>
 	<div th:insert="~{/include/admin/adminHeader :: adminHeader}"></div>
 	<div th:insert="~{/include/admin/adminNavigator :: adminNavigator}"></div>
+	
+	<script th:inline="javascript">
+		$(function(){
+			var urls = new Array();
+			//为分页按钮a元素设置对应的href属性值
+			setPageUrl(urls);
+		});
+	</script>
 
 	<div class="workingArea">
 		<label class="tab" >用户管理</label>

@@ -16,6 +16,10 @@
 				var oid = $(this).attr("oid");
 				$("tr.orderPageOrderItemTR[oid="+oid+"]").toggle();
 			});
+			
+			var urls = new Array();
+			//为分页按钮a元素设置对应的href属性值
+			setPageUrl(urls);
 		});
 	</script>
 
@@ -51,7 +55,7 @@
 						<td th:inline="text">[[${#dates.format(o.confirmDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 						<td>
 							<button type="button" th:attr="oid=@{${o.id}}" class="btn btn-indigo orderPageCheckOrderItems">查看详情</button>
-							<a th:href="@{'/admin/order/delivery/'+${o.id}}" th:if="${o.status=='waitDelivery'}">
+							<a th:href="@{'/admin/order/'+${o.id}+'delivery/'}" th:if="${o.status=='waitDelivery'}">
 								<button class="btn btn-primary btn-sm">发货</button>
 							</a>
 						</td>

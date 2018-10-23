@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ import com.zhihao.tmall.util.UploadedImageFile;
  * 2018年8月26日
  */
 @Controller
-@RequestMapping("admin/productImage")
+@RequestMapping("admin/product")
 public class ProductImageController {
 
 	@Autowired
@@ -34,23 +35,23 @@ public class ProductImageController {
 	ProductImageService productImageService;
 
 	// 添加产品图片
-	@PostMapping("add")
+	@PostMapping("/{pid}/image")
 	public String add(ProductImage  pi, HttpSession session, UploadedImageFile uploadedImageFile) {
 		productImageService.add(pi, session, uploadedImageFile);
 		
-		return "redirect:/admin/productImage/list/"+pi.getPid();
+		return "redirect:/admin/product/"+pi.getPid()+"image";
 	}
 
 	// 删除图片
-	@GetMapping("delete/{id}")
-	public String delete(@PathVariable int id, int pid, HttpSession session) {
+	@DeleteMapping("/{pid}/image/{id}")
+	public String delete(@PathVariable(value="id") int id, int pid, HttpSession session) {
 		productImageService.delete(id, session);
 		
-		return "redirect:/admin/productImage/list/"+pid;
+		return "redirect:/admin/product/"+pid+"image";
 	}
 
 	// 显示图片
-	@GetMapping("list/{pid}")
+	@GetMapping("/{pid}/image")
 	public String list(@PathVariable int pid, Model model) {
 		Product p = productService.get(pid);
 		List<ProductImage> pisSingle = productImageService.list(pid, ProductImageService.type_single);

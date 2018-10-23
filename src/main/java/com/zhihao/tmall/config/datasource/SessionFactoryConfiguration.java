@@ -10,9 +10,9 @@ import javax.sql.DataSource;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -25,7 +25,7 @@ import com.github.pagehelper.PageInterceptor;
  * 2018年7月27日
  */
 @Configuration
-@MapperScan("com.zhihao.tmall.mapper")
+@AutoConfigureAfter(DataSourceConfiguration.class)
 public class SessionFactoryConfiguration {
 
 	@Value("${mybatis-config-file}")

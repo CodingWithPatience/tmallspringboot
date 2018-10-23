@@ -1,7 +1,11 @@
 package com.zhihao.tmall.pojo;
 
-public class PropertyValue {
-    private Integer id;
+import java.io.Serializable;
+
+public class PropertyValue implements Serializable {
+	private static final long serialVersionUID = 6595840217244601581L;
+
+	private Integer id;
 
     private Integer pid;
 

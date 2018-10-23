@@ -1,11 +1,14 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReviewExample {
-    protected String orderByClause;
+public class ReviewExample implements Serializable {
+	private static final long serialVersionUID = -3069446775973352436L;
+
+	protected String orderByClause;
 
     protected boolean distinct;
 

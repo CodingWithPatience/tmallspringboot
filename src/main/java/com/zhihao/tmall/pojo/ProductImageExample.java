@@ -1,10 +1,13 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductImageExample {
-    protected String orderByClause;
+public class ProductImageExample implements Serializable {
+	private static final long serialVersionUID = 6549526440253200565L;
+
+	protected String orderByClause;
 
     protected boolean distinct;
 

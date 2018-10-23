@@ -8,7 +8,9 @@ import com.zhihao.tmall.service.PropertyValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,7 +22,7 @@ import java.util.List;
  * 2018年8月26日
  */
 @Controller
-@RequestMapping("admin/propertyValue")
+@RequestMapping("admin/product")
 public class PropertyValueController {
     @Autowired
     PropertyValueService propertyValueService;
@@ -28,7 +30,7 @@ public class PropertyValueController {
     ProductService productService;
 
     // 编辑产品属性值
-    @RequestMapping("edit/{pid}")
+    @GetMapping("/{pid}/propertyValue")
     public String edit(Model model, @PathVariable int pid) {
         Product p = productService.get(pid);
         propertyValueService.init(p);
@@ -40,10 +42,10 @@ public class PropertyValueController {
     }
     
     // 更新产品属性值
-    @RequestMapping("update")
+    @PutMapping("/{pid}/propertyValue")
     @ResponseBody
-    public String update(PropertyValue pv) {
-        propertyValueService.update(pv);
+    public String update(PropertyValue pValue) {
+        propertyValueService.update(pValue);
         return "success";
     }
 }

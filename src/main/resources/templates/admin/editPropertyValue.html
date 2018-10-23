@@ -14,28 +14,30 @@
 		$(function() {
 			$("input.pvValue").keyup(function(){
 				var value = $(this).val();
-				var page = getProjectPath()+"admin/propertyValue/update";
+				var pid = [[${p.id}]];
 				var pvid = $(this).attr("pvid");
+				var url = "/admin/product/"+pid+"/propertyValue";
 				var parentSpan = $(this).parent("span");
 				parentSpan.css("border","1px solid yellow");
-				$.post(
-					page,
-					{"value":value,"id":pvid},
-					function(result){
-						if("success"==result)
-						parentSpan.css("border","1px solid green");
+				$.ajax({
+					url : url,
+					type : 'put',
+					data : {"value":value,"id":pvid},
+					success : function(result){
+						if(result && "success"==result)
+							parentSpan.css("border","1px solid green");
 						else
 							parentSpan.css("border","1px solid red");
 					}
-				);		
+				});		
 			});
 		});
 	</script>
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/category/'+${p.category.id}+'/product'}" th:inline="text">[[${p.category.name}]]</a></li>
 			<li class="breadcrumb-item active" th:inline="text">[[${p.name}]]</li>
 			<li class="breadcrumb-item active">编辑产品属性</li>
 		</ol>

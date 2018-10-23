@@ -24,13 +24,19 @@
 					return true;
 				return false;
 			});
+			
+			//删除图片
+			$("span.imageDelete").click(function(){
+				var url = $(this).attr("link");
+				deleteFun(url);
+			});
 		});
 	</script>
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/admin/product/list/'+${p.category.id}}" th:inline="text">[[${p.category.name}]]</a></li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{'/admin/category/'+${p.category.id}+'/product'}" th:inline="text">[[${p.category.name}]]</a></li>
 			<li class="breadcrumb-item active" th:inline="text">[[${p.name}]]</li>
 			<li class="breadcrumb-item active">产品图片管理</li>
 		</ol>
@@ -42,7 +48,7 @@
 						<div class="card border-dark mb-3 addPictureDiv">
 							<div class="card-header">新增产品<b class="text-primary"> 单个 </b>图片</div>
 							<div class="card-body text-dark">
-								<form method="post" class="addFormSingle" th:attr="action=@{/admin/productImage/add}" enctype="multipart/form-data">
+								<form method="post" class="addFormSingle" th:attr="action=@{'/admin/product/'+${p.id}+'/image'}" enctype="multipart/form-data">
 									<table class="addTable">
 										<tr>
 											<td>请选择本地图片 尺寸400X400 为佳</td>
@@ -78,9 +84,7 @@
 										<a title="点击查看原图" th:href="@{'/img/productSingle/'+${pi.id}+'.jpg'}"><img height="50px" th:attr="src=@{'/img/productSingle/'+${pi.id}+'.jpg'}"></a>
 									</td>
 									<td>
-										<a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/productImage/delete/'+${pi.id}+'?pid='+${p.id}}">
-											<span class="fa fa-trash-o" aria-hidden="true"></span>
-										</a>
+										<span th:attr="link=@{'/admin/product/'+${p.id}+'/image/'+${pi.id}}" class="fa fa-trash-o imageDelete" aria-hidden="true"></span>
 									</td>
 								</tr>
 							</tbody>
@@ -92,7 +96,7 @@
 						<div class="card border-dark mb-3 addDiv">
 							<div class="card-header">新增产品<b class="text-primary"> 详情 </b>图片</div>
 							<div class="card-body text-dark">
-								<form method="post" class="addFormDetail" th:attr="action=@{/admin/productImage/add}" enctype="multipart/form-data">
+								<form method="post" class="addFormDetail" th:attr="action=@{'/admin/product/'+${p.id}+'/image'}" enctype="multipart/form-data">
 									<table class="addTable">
 										<tr>
 											<td>请选择本地图片 宽度790  为佳</td>
@@ -128,9 +132,7 @@
 										<a title="点击查看原图" th:href="@{'/img/productDetail/'+${pi.id}+'.jpg'}"><img height="50px" th:attr="src=@{'/img/productDetail/'+${pi.id}+'.jpg'}"></a>
 									</td>
 									<td>
-										<a th:attr="deleteLink=@{'true'}" th:href="@{'/admin/productImage/delete/'+${pi.id}+'?pid='+${p.id}}">
-											<span class="fa fa-trash-o" aria-hidden="true"></span>
-										</a>
+										<span th:attr="link=@{'/admin/product/'+${p.id}+'/image/'+${pi.id}}" class="fa fa-trash-o imageDelete" aria-hidden="true"></span>
 									</td>
 								</tr>
 							</tbody>

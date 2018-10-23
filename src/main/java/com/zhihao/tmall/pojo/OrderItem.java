@@ -1,7 +1,11 @@
 package com.zhihao.tmall.pojo;
 
-public class OrderItem {
-    private Integer id;
+import java.io.Serializable;
+
+public class OrderItem implements Serializable {
+	private static final long serialVersionUID = 8308737603722034134L;
+
+	private Integer id;
 
     private Integer pid;
 

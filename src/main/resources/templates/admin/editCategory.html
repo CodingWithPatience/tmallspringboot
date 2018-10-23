@@ -22,20 +22,23 @@
 
 	<div class="workingArea">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
+			<li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
 			<li class="breadcrumb-item active">编辑分类</li>
 		</ol>
 		<div class="card border-dark mb-3 editDiv">
 			<div class="card-header">编辑分类</div>
 			<div class="card-body text-dark">
-				<form method="post" id="editForm" th:attr="action=@{/admin/category/update/}"  enctype="multipart/form-data">
+				<form method="post" id="editForm" th:attr="action=@{'/admin/category/'+{c.id}}"  enctype="multipart/form-data">
 					<table class="editTable">
 						<tr>
-							<td>分类名称</td>
-							<td><input  id="name" name="name" th:attr="value=@{${c.name}}" type="text" class="form-control"></td>
+							<td><input type="hidden" name="_method" value="PUT" /></td>
 						</tr>
 						<tr>
-							<td>分类圖片</td>
+							<td>分类名称</td>
+							<td><input id="name" name="name" th:attr="value=@{${c.name}}" type="text" class="form-control" /></td>
+						</tr>
+						<tr>
+							<td>分类图片</td>
 							<td>
 								<input id="categoryPic" accept="image/*" type="file" name="image" />
 							</td>

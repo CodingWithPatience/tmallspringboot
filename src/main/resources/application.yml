@@ -1,7 +1,6 @@
 server:
   port: 8081
   servlet:
-    context-path: /tmallspringboot
     session:
       timeout: 0
           
@@ -12,6 +11,36 @@ spring:
     suffix: .html
   resources:
     static-locations: classpath:/static/
+    
+  mail:
+    host: smtp.qq.com
+    port: 587
+    protocol: smtp
+    username: 916106209@qq.com
+    password: cahkttifpeixbbdj
+    default-encoding: UTF-8
+    
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8
+      
+  session:
+    store-type: redis
+    
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 
+    timeout: 0
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 0
+        max-wait: -1
     
 datasource:
   driver: com.mysql.jdbc.Driver
@@ -31,3 +60,8 @@ datasource:
 mybatis-config-file: mybatis-config.xml
 mapper-path: /mapper/**.xml
 pojo-package: com.zhihao.tmall.pojo
+
+mail:
+  subject: 注册账户激活
+  username: username
+  code: code

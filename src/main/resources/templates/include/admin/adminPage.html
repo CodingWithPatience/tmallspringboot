@@ -6,6 +6,7 @@
 		// 否则移除li标签内的class="active"
 		$(function () {
 			var curUrl = document.location.href;
+			//当前分页按钮href属性值，去除可能存在的sessionId部分
 			curUrl = curUrl.split(";")[0];
 			var pathName = document.location.pathname;
 			pathName = pathName.split(";")[0];
@@ -21,10 +22,11 @@
 					if(!firstOrList)
 						li.addClass("active");
 				} else {
+					//当前url不包含参数page
 					if(subUrl.indexOf("page")<0){
-						var urlArr = url.split("/");
-						var pageNum = urlArr[urlArr.length-1];
-						if("page1" == pageNum){
+						//获取参数部分
+						var pageNum = url.split("?")[1];
+						if("page=1" == pageNum){
 							var li = $(this).parent();
 							var firstOrList = false;
 							firstOrList = isfirstOrList(li);
@@ -36,6 +38,7 @@
 			});
 		})
 		
+		//判断是否为第一页按钮、最后一页按钮、上一页按钮、下一页按钮的其中一个
 		function isfirstOrList(li){
 			var clazz = li.attr("class");
 			var clazzArr = clazz.split(" ");
@@ -47,6 +50,46 @@
 			}
 			return false;
 		}
+		
+		//拼接分页按钮的href属性值
+		function setPageUrl(array) {
+			var url = "/admin";
+			var len = array.length;
+			//根据array拼接url
+			for(var i=0; i<len; i++) {
+				url += "/"+array[i];
+			}
+			url += "/"+[[${page.param}]];
+			$("a.page-link").each(function(){
+				var page = $(this).attr("page");
+				var text = $(this).text();
+				var curUrl = url;
+				//根据自定义的page属性设置查询参数page
+				var pageNum = findPageNum(page,text);
+				//带page查询参数的完整url
+				curUrl += "?page="+pageNum;
+				//设置当前a元素的href属性值
+				$(this).attr("href",curUrl);
+			});
+		}
+		
+		//根据a元素中page属性判断设置对应的页面数值，参数page是page属性的值
+		function findPageNum(page,text) {
+			var pageNum;
+			if(page == "first") 
+				pageNum = [[${page.getFirstPage()}]];
+			else if(page == "previous") 
+				pageNum = [[${page.getPreviousPage()}]];
+			else if(page == "next") 
+				pageNum = [[${page.getNextPage()}]];
+			else if(page == "last") 
+				pageNum = [[${page.getLastPage()}]];
+			else 
+				pageNum = text;
+			
+			return pageNum;
+		}
+		
 		// 使href属性值为当前url的a标签点击无效
 		// 通过class="diabled"来获得href属性值为当前url的a标签
 		$(function(){
@@ -57,30 +100,30 @@
 	</script>
 
 	<nav aria-label="pagination">
-		<ul class="pagination pagination-circle pg-blue mb-0 justify-content-center" th:with="id=${page.id==null?'':page.id+'/'}, pageParam=${page.getParam()}">
+		<ul class="pagination pagination-circle pg-blue mb-0 justify-content-center" >
 			<li class="page-item previous">
-				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getFirstPage()}}" class="page-link" aria-label="Previous" >
+				<a class="page-link" th:attr="page=@{'first'}" aria-label="Previous" >
 					<span aria-hidden="true">&laquo;</span>
 					<span class="sr-only">First</span>
 				</a>
 			</li>
 			<li class="page-item previous">
-				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getPreviousPage()}}" class="page-link" aria-label="Previous" >
+				<a class="page-link" th:attr="page=@{'previous'}" aria-label="Previous" >
 					<span aria-hidden="true">&lsaquo;</span>
 					<span class="sr-only">Previous</span>
 				</a>
 			</li>    
 			<li class="page-item" th:each="page, stat : ${page.getPageList()}">
-				<a th:with="pageNum=${page.getPageNum()}" th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${pageNum}}" class="page-link" th:inline="text">[[${pageNum}]]</a>
+				<a th:with="pageNum=${page.getPageNum()}" class="page-link" th:inline="text">[[${pageNum}]]</a>
 			</li>
 			<li class="page-item next">
-				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getNextPage()}}" class="page-link" aria-label="Next">
+				<a class="page-link" th:attr="page=@{'next'}" aria-label="Next">
 					<span aria-hidden="true">&rsaquo;</span>
 					<span class="sr-only">Next</span>
 				</a>
 			</li>
 			<li class="page-item next">
-				<a th:href="@{'/admin/'+${pageParam}+'/list/'+${id}+'page'+${page.getLastPage()}}" class="page-link" aria-label="Next">
+				<a class="page-link" th:attr="page=@{'last'}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 					<span class="sr-only">List</span>
 				</a>

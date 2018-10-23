@@ -1,5 +1,6 @@
 package com.zhihao.tmall.controller;
 
+import com.zhihao.tmall.constant.PageParam;
 import com.zhihao.tmall.pojo.Category;
 import com.zhihao.tmall.pojo.Order;
 import com.zhihao.tmall.pojo.OrderItem;
@@ -8,6 +9,7 @@ import com.zhihao.tmall.pojo.PropertyValue;
 import com.zhihao.tmall.pojo.Review;
 import com.zhihao.tmall.pojo.User;
 import com.zhihao.tmall.service.*;
+import com.zhihao.tmall.util.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,6 +57,8 @@ public class ForeController {
     OrderItemService orderItemService;
     @Autowired
     ReviewService reviewService;
+    @Autowired
+    MailService mailService;
     
     // 登陆请求
     @GetMapping("login")
@@ -83,7 +87,7 @@ public class ForeController {
         	session.removeAttribute("servletPath");
         	if(servletPath.equals("/"))
         		return "redirect:/home";
-			return "redirect:/"+servletPath;                  
+			return "redirect:"+servletPath;                  
         }
         return "redirect:/home";                  // 登陆成功，重定向到home页
     }
@@ -97,20 +101,35 @@ public class ForeController {
 
     // 处理注册提交的数据
     @PostMapping("register")
-    public String register(Model model, User user) {
+    public String register(HttpSession session, Model model, User user) {
         String name = user.getName();
         name = HtmlUtils.htmlEscape(name);
+        String mail = user.getMailAccount();
+        mail = HtmlUtils.htmlEscape(mail);
         user.setName(name);
-        boolean exist = userService.isExist(name);    // 查询用户名是否已经存在
+        user.setMailAccount(mail);
+        String contextPath = session.getServletContext().getContextPath();
         
-        if(exist){
+        boolean nameExist = userService.isUsernameExist(name);    // 查询用户名是否已经存在
+        if(nameExist){
             String errMsg = "用户名已经被使用";
             model.addAttribute("errMsg", errMsg);
             model.addAttribute("user", null);
             return "fore/register";                   // 用户名已存在，返回注册页
         }
+        
+        boolean mailExist = userService.isMailExist(mail);
+        if(mailExist){
+            String errMsg = "该邮箱已绑定账户，请使用其他邮箱";
+            model.addAttribute("errMsg", errMsg);
+            model.addAttribute("user", null);
+            return "fore/register";                   // 邮箱已绑定账户，返回注册页
+        }
+        user.setCode(mailService.generateCode());     // 为新注册用户设置激活码，邮箱激活成功后，激活码设为null
+        user.setStatus(UserService.INACTIVE);
         userService.add(user);                        // 注册成功，向数据库中写入用户
-        return "redirect:/registerSuccess";
+        mailService.sendMail(contextPath, user);      // 激活账户邮件发送
+        return "redirect:/register/mailauth";
     }
     
     // 注销用户请求
@@ -408,15 +427,26 @@ public class ForeController {
     }
    
     // 我的订单页面
-    @GetMapping("bought")
-    public String bought(Model model, HttpSession session) {
-//        User user = (User)  session.getAttribute("user");
-//        long total = orderService.getTotalByUser(user.getId(), OrderService.delete);
-        // 过滤处于删除状态的订单
-//        List<Order> os = orderService.list(user.getId(), 24, 1, OrderService.delete);   
-//        orderItemService.fill(os);
-//        model.addAttribute("os", os);
-//        model.addAttribute("total", total);
+    @GetMapping(value= {"bought/{status}"})
+    public String bought(Model model, HttpSession session,
+    		Page boughtPage, @PathVariable String status, @RequestParam(required=false) Integer page) {
+        User user = (User) session.getAttribute("user");
+        boughtPage.setParam(PageParam.BOUGTH);
+        // 设置每页显示的数量及当前页，一定要先调用setCount方法，再调用setCurrentPage方法
+        // 因为setCurrentPage方法中用到count变量，否则count变量的值为默认值5
+        boughtPage.setCount(OrderService.LIMIT);
+        boughtPage.setCurrentPage(page);
+        
+        if (status.equals("all")) {
+        	status = OrderService.delete;
+		}
+        
+        long total = orderService.getTotalByUser(user.getId(), status);
+        List<Order> os = orderService.list(user.getId(), boughtPage, status);
+        orderItemService.fill(os);
+        boughtPage.setTotal(total);
+        model.addAttribute("os", os);
+        model.addAttribute("page", boughtPage);
         return "fore/bought";
     }
     

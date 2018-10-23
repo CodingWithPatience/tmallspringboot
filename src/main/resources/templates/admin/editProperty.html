@@ -12,8 +12,8 @@
 	
 	<div class="workingArea">
 	<ol class="breadcrumb">
-	  <li class="breadcrumb-item"><a th:href="@{/admin/category/list}">所有分类</a></li>
-	  <li class="breadcrumb-item"><a th:href="@{'/admin/property/list/'+${p.category.id}}"
+	  <li class="breadcrumb-item"><a th:href="@{/admin/category}">所有分类</a></li>
+	  <li class="breadcrumb-item"><a th:href="@{'/admin/category/'+${p.category.id}+'/property'}"
 	   			 th:inline="text">[[${p.category.name}]]</a>
 	  </li>
 	  <li class="breadcrumb-item active">编辑属性</li>
@@ -22,7 +22,7 @@
 	<div class="card border-dark mb-3 editDiv">
 		<div class="card-header">编辑属性</div>
 			<div class="card-body text-dark">
-				<form method="post" id="editForm" th:attr="action=@{/admin/property/update}">
+				<form method="post" id="editForm" th:attr="action=@{'/admin/category/'+${p.category.id}+'/property/'+${p.id}}">
 					<table class="editTable">
 						<tr>
 							<td>属性名称</td>
@@ -30,9 +30,11 @@
 						</tr>
 						<tr class="submitTR">
 							<td colspan="2" align="center">
-							<input type="hidden" name="id" th:attr="value=@{${p.id}}">
-							<input type="hidden" name="cid" th:attr="value=@{${p.category.id}}">
-							<button type="submit" class="btn btn-success">提 交</button></td>
+								<input type="hidden" name="_method" value="PUT" >
+								<input type="hidden" name="id" th:attr="value=@{${p.id}}">
+								<input type="hidden" name="cid" th:attr="value=@{${p.category.id}}">
+								<button type="submit" class="btn btn-success">提 交</button>
+							</td>
 						</tr>
 					</table>
 				</form>

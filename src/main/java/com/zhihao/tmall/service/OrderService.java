@@ -9,6 +9,10 @@ import com.zhihao.tmall.util.Page;
 
 public interface OrderService {
 
+	// 每页显示的订单个数
+	int LIMIT = 10;
+	
+	// 订单状态
     String waitPay = "waitPay";
     String waitDelivery = "waitDelivery";
     String waitConfirm = "waitConfirm";
@@ -25,7 +29,7 @@ public interface OrderService {
     Order get(int id);
     List<Order> list();
     List<Order> list(Page page);
-    List<Order> list(int uid, int count, int limit, String status);
+    List<Order> list(int uid, Page page, String status);
 	Order create(Order order, User user);
 	Order finish(Order order, List<OrderItem> orderItems);
 }

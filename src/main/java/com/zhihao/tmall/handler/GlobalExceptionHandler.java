@@ -6,7 +6,6 @@ package com.zhihao.tmall.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author zzh
  * 2018年7月27日
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value=Exception.class)

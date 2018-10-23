@@ -1,10 +1,13 @@
 package com.zhihao.tmall.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductExample {
+public class ProductExample implements Serializable {
+	private static final long serialVersionUID = -2045378055727140635L;
+
 	// 非逆向工程生成字段，设置从那一条数据开始查找，跳过前面offse条数据
 	protected long offset = -1;
 	

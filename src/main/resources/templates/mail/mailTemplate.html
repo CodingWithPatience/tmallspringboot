@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+	<link rel="shortcut icon" type="image/x-icon" 
+		th:href="@{'http://localhost:8081'+${contextPath}+'/img/site/tmallIcon.ico'}" media="screen" /> 
+</head>
+<body>
+	<div>
+		<p th:inline="text">
+			尊敬的[[${username}]]您好！这是来自tmallspringboot官网的激活邮件。欢迎您注册
+			本站账号，请点击以下激活链接，完成账号注册。如非本人操作，请忽略该邮件。
+		</p>
+		<a th:href="@{'http://localhost:8081'+${contextPath}+'/mailauth/active?code='+${code}}">激活账号</a>
+	</div>
+</body>
+</html>

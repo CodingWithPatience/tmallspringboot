@@ -1,8 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="boughtPage">
+	<!-- <script type="text/javascript" src="/js/fore/bought.js"></script> -->
+	
 	<script>
 		var deleteOrder = false;     // 标记是否要删除订单
-		var deleteOrderid = 0;       // 订单id
 		var orderStatus = "delete";  // 设置初始订单状态为"delete"，根据状态查询订单
 		var count = 0;               // 查询第count个订单 
 		var total = 0;               // 订单总数
@@ -34,40 +35,38 @@
 			)
 		}
 		
+		var deleteOrderid = 0;       // 订单id
+		var url = window.location.pathname;
 		$(function(){
-			// 因为预加载了n次，所有将count设置为n，从第n个位置开始查询
-			getTotal(orderStatus);
-		 	count = n;  
-			// 监听下拉滚动条事件，该函数在header.html中定义
-			bindScrollEvent(callback, count, orderStatus);   // 每调用一次callback函数，count自增一次
-			
-			$("a[orderStatus]").click(function(){
-				orderStatus = $(this).attr("orderStatus");   // 设置orderStatus
-				if(orderStatus == "all")         // orderStatus为"all"即查询除了标记为删除状态外的所有订单
-					orderStatus = "delete";				 // 将orderStatus设置为"delete"，反向查询除了"delete"
-					                               // 状态外的其他所有订单
-				// 删除所有已渲染的table
-				if(removeTable()) {
-					// 为当前a元素的父元素添加class "selectedOrderType"，并删除其他已经存在的class
-					$("div.orderType div").removeClass("selectedOrderType");
-					$(this).parent("div").addClass("selectedOrderType");
-					
-					// 查询订单总数
-					getTotal(orderStatus);
-					// 监听滚动条下拉事件
-					bindScrollEvent(callback, count, orderStatus);
+			$("a[orderStatus]").each(function(){
+				var href = $(this).attr("href");
+				if(url.indexOf(href) >= 0) {
+					$(this).parent("div").addClass("selectedOrderType")
 				}
 			});
-	
+			
+			$("a.deleteOrderLink").click(function(){
+				var oid = $(this).attr("oid");
+				deleteOrderid = oid;
+				deleteOrder = false;
+				$("#deleteConfirmModal").modal("show");
+			});
+	 
 			$("button.deleteConfirmButton").click(function(){
 				deleteOrder = true;
 				$("#deleteConfirmModal").modal('hide');
 			});
 			
+			// 发货
+			$("button.ask2delivery").click(function(){
+				askToDelivery();
+			})
+			
 			// 确认删除订单
 			$('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
 				if(deleteOrder){
-					var page="deleteOrder";
+					var page="/deleteOrder";
+					console.log(deleteOrderid);
 					$.post(
 						page,
 						{"oid":deleteOrderid},
@@ -82,6 +81,10 @@
 					);
 				}
 			})     
+			
+			var status = $("div.selectedOrderType a").attr("orderStatus");
+			var urls = new Array("bought", status);
+			setPageUrl(urls);
 		});
 		
 		// 删除已经渲染的table
@@ -95,13 +98,6 @@
 			});
 			if(count == number)    // 删除所有table后返回true
 				return true;
-		}
-		
-		// 删除订单
-		function deleteOrderById() {
-			deleteOrderid = $("a.deleteOrderLink").attr("oid");
-			deleteOrder = false;
-			$("#deleteConfirmModal").modal("show");
 		}
 		
 		// 催促卖家发货
@@ -150,236 +146,16 @@
 				table.appendChild(productTr);
 			}
 			$("div.orderListItem").append(table);
-		}
-
-		// 渲染table的第一tr元素
-		function createTableHeadTr(data) {
-			var headTr = document.createElement("tr");
-			headTr.className = "orderListItemFirstTR";
-			
-			var td1 = document.createElement("td");
-			td1.setAttribute("colspan", "2");
-
-			var b = document.createElement("b");
-			var date = data.createDate;
-			date = (new Date(date)).getTime();
-			date = new Date(date).format("yyyy-MM-dd hh:mm:ss");
-			var createDate = document.createTextNode(date);
-			b.appendChild(createDate);
-
-			var span = document.createElement("span");
-			var orderCode = document.createTextNode("订单号："+data.orderCode);
-			span.appendChild(orderCode);
-
-			td1.appendChild(b);
-			td1.appendChild(span);
-			headTr.appendChild(td1);
-			
-			var td2 = document.createElement("td");
-			td2.setAttribute("colspan", "2");
-			
-			var img = document.createElement("img");
-			img.setAttribute("width", "13px");
-			img.setAttribute("src", getProjectPath()+"img/site/orderItemTmall.png");
-			var tmall = document.createTextNode("天猫商场");
-
-			td2.appendChild(img);
-			td2.appendChild(tmall);
-			headTr.appendChild(td2);
-
-			var td3 = document.createElement("td");
-			td3.setAttribute("colspan", "1");
-
-			var a = document.createElement("a");
-			a.className = "wangwanglink";
-
-			var span = document.createElement("span");
-			span.className = "orderItemWangWangGif";
-
-			a.appendChild(span);
-			td3.appendChild(a);
-			headTr.appendChild(td3);
-
-			var td4 = document.createElement("td");
-			td4.className = "orderItemDeleteTD";
-
-			var a = document.createElement("a");
-			a.className = "deleteOrderLink";
-			a.setAttribute("onclick", "deleteOrderById()");
-			a.setAttribute("oid", data.id);
-			a.setAttribute("href", "#");
-
-			var span = document.createElement("span");
-			span.className = "orderListItemDelete glyphicon glyphicon-trash";
-
-			a.appendChild(span);
-			td4.appendChild(a);
-			headTr.appendChild(td4);
-			
-			return headTr;
-		}
-
-		// 渲染包含订单信息的tr元素
-		function createTableProductTr(data, orderItem, i, length) {
-			var productTr = document.createElement("tr");
-			productTr.className = "orderItemProductInfoPartTR";
-
-			var td1 = document.createElement("td");
-			td1.className = "orderItemProductInfoPartTD";
-
-			var img = document.createElement("img");
-			img.setAttribute("width","80px");
-			img.setAttribute("height","80px");
-			img.setAttribute("src",getProjectPath()+"img/productSingle_middle/"+orderItem.product.firstProductImage.id+".jpg");
-
-			td1.appendChild(img);
-			productTr.appendChild(td1);
-			
-			var td2 = document.createElement("td");
-			td2.className = "orderItemProductInfoPartTD";
-
-			var div = document.createElement("div");
-			div.className = "orderItemProductLinkOutDiv";
-			var a = document.createElement("a");
-			a.setAttribute("href",getProjectPath()+"product/"+orderItem.product.id);
-			var pName = document.createTextNode(orderItem.product.name);
-			a.appendChild(pName);
-			div.appendChild(a);
-			var div2 = document.createElement("div");
-			div2.className = "orderItemProductLinkInnerDiv";
-			var img1 = document.createElement("img");
-			var img2 = document.createElement("img");
-			var img3 = document.createElement("img");
-			img1.setAttribute("src",getProjectPath()+"img/site/creditcard.png");
-			img1.setAttribute("title","支持信用卡支付");
-			img2.setAttribute("src",getProjectPath()+"img/site/7day.png");
-			img2.setAttribute("title","消费者保障服务，承诺7天退货");
-			img3.setAttribute("src",getProjectPath()+"img/site/promise.png");
-			img3.setAttribute("title","消费者保障服务，承诺如实描述");
-			div2.appendChild(img1);
-			div2.appendChild(img2);
-			div2.appendChild(img3);
-			div.appendChild(div2);
-			td2.appendChild(div);
-			productTr.appendChild(td2);
-
-			var td3 = document.createElement("td");
-			td3.className = "orderItemProductInfoPartTD";
-			td3.setAttribute("width", "100px");
-			var div1 = document.createElement("div");
-			var div2 = document.createElement("div");
-			var formatOPrice = orderItem.product.originalPrice;
-			var formatPPrice = orderItem.product.promotePrice;
-			formatOPrice = formatMoney(formatOPrice);
-			formatPPrice = formatMoney(formatPPrice);
-			var oPrice = document.createTextNode(formatOPrice);
-			var pPrice = document.createTextNode(formatPPrice);
-			div1.appendChild(oPrice);
-			div2.appendChild(pPrice);
-			td3.appendChild(div1);
-			td3.appendChild(div2);
-			productTr.appendChild(td3);
-
-			if(i == 0) {
-				var td4 = document.createElement("td");
-				td4.setAttribute("valign","center");
-				td4.setAttribute("rowspan",length);
-				td4.setAttribute("width","100px");
-				td4.className = "orderListItemButtonTD orderItemOrderInfoPartTD";
-				var span = document.createElement("span");
-				span.className = "orderListItemNumber";
-				var number = document.createTextNode(data.totalNumber);
-				span.appendChild(number);
-				td4.appendChild(span);
-				productTr.appendChild(td4);
-
-				var td5 = document.createElement("td");
-				td5.setAttribute("valign","center");
-				td5.setAttribute("rowspan",length);
-				td5.setAttribute("width","120px");
-				td5.className = "orderListItemProductRealPriceTD orderItemOrderInfoPartTD";
-				var div1 = document.createElement("div");
-				var div2 = document.createElement("div");
-				div1.className = "orderListItemProductRealPrice";
-				div2.className = "orderListItemPriceWithTransport";
-				var formatTotal = data.total;
-				formatTotal = formatMoney(formatTotal);
-				var oPrice = document.createTextNode(formatTotal);
-				var transport = document.createTextNode("(含运费：￥0.00)");
-				div1.appendChild(oPrice);
-				div2.appendChild(transport);
-				td5.appendChild(div1);
-				td5.appendChild(div2);
-				productTr.appendChild(td5);
-
-				var td6 = document.createElement("td");
-				td6.setAttribute("valign","center");
-				td6.setAttribute("rowspan",length);
-				td6.setAttribute("width","100px");
-				td6.className = "orderListItemButtonTD orderItemOrderInfoPartTD";
-
-				var a = document.createElement("a");
-				var button = document.createElement("button");
-				if("waitConfirm" == data.status){
-					a.setAttribute("href",getProjectPath()+"confirmPay/"+data.id);
-					button.className = "orderListItemConfirm";
-					var confirm = document.createTextNode("确认收货");
-					button.appendChild(confirm);
-					a.appendChild(button);
-					td6.appendChild(a);
-					productTr.appendChild(td6);
-				}
-				else if("waitPay"==data.status) {
-					a.setAttribute("href",getProjectPath()+"alipay/"+data.id+"/"+data.total);
-					button.className = "orderListItemConfirm";
-					var pay = document.createTextNode("付款");
-					button.appendChild(pay);
-					a.appendChild(button);
-					td6.appendChild(a);
-					productTr.appendChild(td6);
-				}
-				else if("waitDelivery"==data.status) {
-					var span = document.createElement("span");
-					var delivery = document.createTextNode("待发货");
-					button.setAttribute("link","admin/order/delivery/"+data.id);
-				 	button.setAttribute("onclick","askToDelivery()"); 
-				 	button.setAttribute("type","button");
-					button.className = "btn btn-blue-grey ask2delivery";
-					var askToDelivery = document.createTextNode("崔发货");
-					button.appendChild(askToDelivery);
-					span.appendChild(delivery);
-					span.appendChild(button);
-					td6.appendChild(span);
-					productTr.appendChild(td6);
-				}
-				else if("waitReview"==data.status) {
-					a.setAttribute("href",getProjectPath()+"review/"+data.id);
-					button.className = "orderListItemReview";
-					var comment = document.createTextNode("评价");
-					button.appendChild(comment);
-					a.appendChild(button);
-					td6.appendChild(a);
-					productTr.appendChild(td6);
-				}
-				else {
-					var span = document.createElement("span");
-					var finish = document.createTextNode("完成");
-					span.appendChild(finish);
-					td6.appendChild(span);
-					productTr.appendChild(td6);
-				}
-			}
-			return productTr;
 		} 
 	</script>
      
 	<div class="boughtDiv">
 		<div class="orderType">
-			<div class="selectedOrderType"><a th:attr="orderStatus=@{'all'}" href="#">所有订单</a></div>
-			<div><a th:attr="orderStatus=@{'waitPay'}" href="#">待付款</a></div>
-			<div><a th:attr="orderStatus=@{'waitDelivery'}" href="#">待发货</a></div>
-			<div><a th:attr="orderStatus=@{'waitConfirm'}" href="#">待收货</a></div>
-			<div><a th:attr="orderStatus=@{'waitReview'}" href="#" class="noRightborder">待评价</a></div>
+			<div><a th:attr="orderStatus=@{'all'}" th:href="@{/bought/all}">所有订单</a></div>
+			<div><a th:attr="orderStatus=@{'waitPay'}" th:href="@{/bought/waitpay}">待付款</a></div>
+			<div><a th:attr="orderStatus=@{'waitDelivery'}" th:href="@{/bought/waitdelivery}">待发货</a></div>
+			<div><a th:attr="orderStatus=@{'waitConfirm'}" th:href="@{/bought/waitconfirm}">待收货</a></div>
+			<div><a th:attr="orderStatus=@{'waitReview'}" th:href="@{/bought/waitreview}" class="noRightborder">待评价</a></div>
 			<div class="orderTypeLastOne"><a class="noRightborder"> </a></div>
 		</div>
 		<div style="clear:both"></div>
@@ -388,14 +164,74 @@
 				<tr>
 					<td>宝贝</td>
 					<td width="100px">单价</td>
-					<td width="100px">数量</td>
-					<td width="120px">实付款</td>
-					<td width="100px">交易操作</td>
+					<td width="80px">数量</td>
+					<td width="140px">实付款</td>
+					<td width="120px">交易操作</td>
 				</tr>
 			</table>
 		</div>
 		<div class="orderListItem">
-			
+			<table class="orderListItemTable" th:each="o : ${os}" th:attr="orderStatus=@{${o.status}}, oid=@{${o.id}}" >
+				<tr class="orderListItemFirstTR">
+					<td colspan="2">
+						<b th:inline="text">[[${#dates.format(o.createDate, 'yyyy-MM-dd HH:mm:ss')}]]</b>
+						<span th:inline="text">订单号: [[${o.orderCode}]]</span>
+					</td>
+					<td colspan="2"><img width="13px" th:attr="src=@{/img/site/orderItemTmall.png}">天猫商场</td>
+					<td colspan="1">
+						<a class="wangwanglink">
+							<span class="orderItemWangWangGif"></span>
+						</a>
+					</td>
+					<td class="orderItemDeleteTD">
+						<a class="deleteOrderLink" th:attr="oid=@{${o.id}}">
+							<span class="orderListItemDelete fa fa-trash-o"></span>
+						</a>
+					</td>
+				</tr>
+				<tr class="orderItemProductInfoPartTR" th:each="oi, stat : ${o.orderItems}">
+					<td class="orderItemProductInfoPartTD"><img width="80" height="80" th:attr="src=@{'/img/productSingle_middle/'+${oi.product.firstProductImage.id}+'.jpg'}"></td>
+					<td class="orderItemProductInfoPartTD">
+						<div class="orderListItemProductLinkOutDiv">
+							<a th:href="@{'/product/'+${oi.product.id}}" th:inline="text">[[${oi.product.name}]]</a>
+							<div class="orderListItemProductLinkInnerDiv">
+								<img th:attr="src=@{/img/site/creditcard.png}" title="支持信用卡支付">
+								<img th:attr="src=@{/img/site/7day.png}" title="消费者保障服务,承诺7天退货">
+								<img th:attr="src=@{/img/site/promise.png}" title="消费者保障服务,承诺如实描述">                      
+							</div>
+						</div>
+					</td>
+					<td class="orderItemProductInfoPartTD" width="100px">
+						<div class="orderListItemProductOriginalPrice" th:inline="text">￥[[${#numbers.formatDecimal(oi.product.originalPrice,0,'COMMA',2,'POINT')}]]</div>
+						<div class="orderListItemProductPrice" th:inline="text">￥[[${#numbers.formatDecimal(oi.product.promotePrice,0,'COMMA',2,'POINT')}]]</div>
+					</td>
+					<td th:attr="rowspan=@{${o.orderItems.size()}}" class="orderListItemNumberTD orderItemOrderInfoPartTD" width="80px" th:if="${stat.count==1}">
+						<span class="orderListItemNumber" th:inline="text">[[${o.totalNumber}]]</span>
+					</td>
+					<td th:attr="rowspan=@{${o.orderItems.size()}}" width="140px" class="orderListItemProductRealPriceTD orderItemOrderInfoPartTD" th:if="${stat.count==1}">
+						<div class="orderListItemProductRealPrice" th:inline="text">￥[[${#numbers.formatDecimal(o.total,0,'COMMA',2,'POINT')}]]</div>
+						<div class="orderListItemPriceWithTransport">(含运费：￥0.00)</div>
+					</td>
+					<td th:attr="rowspan=@{${o.orderItems.size()}}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="120px" th:if="${stat.count==1}">
+						<a th:href="@{'/confirmPay/'+${o.id}}" th:if="${o.status=='waitConfirm'}">
+							<button class="orderListItemConfirm">确认收货</button>
+						</a>
+						<a th:href="@{'/alipay/'+${o.id}+'/'+${o.total}}" th:if="${o.status=='waitPay'}">
+							<button class="orderListItemConfirm">付款</button>
+						</a>                             
+						<span th:if="${o.status=='waitDelivery'}">待发货 
+							<button th:attr="link=@{'/admin/order/delivery/'+${o.id}}" class="btn btn-blue-grey ask2delivery">提醒发货</button>
+						</span>
+						<a th:href="@{'/review/'+${o.id}}" th:if="${o.status=='waitReview'}">
+							<button  class="orderListItemReview">评价</button>
+						</a>
+						<span th:if="${o.status=='finish'}">完成</span>
+					</td>                    
+				</tr>
+			</table> 	
+		</div>
+		<div class="pageDiv">
+			<div th:insert="~{/include/forePage :: forePage}"></div>
 		</div>
 	</div>
 </div>

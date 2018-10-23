@@ -43,7 +43,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
 	public long getTotalByUser(int uid, String status) {
     	if(OrderService.delete.equals(status))
+    		// 返回除处于已删除状态外的所有订单
     		return orderMapper.getTotalByUserAll(uid, status);
+    		// 返回status状态下的所有订单
 		return orderMapper.getTotalByUser(uid, status);
 	}
     
@@ -115,17 +117,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> list(int uid, int count, int limit, String status) {
+    public List<Order> list(int uid, Page page, String status) {
         OrderExample example =new OrderExample();
         Criteria criteria = example.createCriteria().andUidEqualTo(uid);
-        if(OrderService.delete.equals(status))
+        if(OrderService.delete.equals(status)) 
         	criteria.andStatusNotEqualTo(status);
-        else
+        else 
         	criteria.andStatusEqualTo(status);
         
         example.setOrderByClause("id desc");
-        example.setOffset(count);
-        example.setLimit(limit);
+        example.setOffset(page.getStart());
+        example.setLimit(page.getCount());
         return orderMapper.selectByExample(example);
     }
     
